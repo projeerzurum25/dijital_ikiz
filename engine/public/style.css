@@ -1791,3 +1791,118 @@ body[data-effective-scale="large"] .btn {
   }
 }
 
+/* Hızlı Araçlar & Masaüstü Uygulama Açılır Menüsü */
+.quick-tools-wrap {
+  position: relative;
+}
+
+.quick-tools-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(320px, 90vw);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  padding: 10px;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qt-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.qt-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: var(--surface-soft);
+  color: var(--text);
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.qt-item:hover {
+  background: var(--primary-soft);
+  border-color: #bfdbfe;
+  color: var(--primary);
+}
+
+/* Seçilen Klasör & Dosya Gezgini */
+.folder-explorer-box {
+  margin-top: 14px;
+  border: 1px solid #bfdbfe;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.folder-summary-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.folder-pill {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.folder-file-list {
+  max-height: 290px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.folder-file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.folder-file-row:last-child {
+  border-bottom: none;
+}
+
+.folder-file-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.folder-file-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--text);
+}
+
+

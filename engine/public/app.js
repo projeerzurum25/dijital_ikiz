@@ -2715,26 +2715,126 @@ window.resetBaskentLedger = async function() {
   renderBaskentKartAuditPage(document.getElementById('pageContent'));
 };
 
+window._bkScannedFiles = window._bkScannedFiles || [];
+window._bkScannedFolderName = window._bkScannedFolderName || '';
+
 window.scanBaskentLocalFolder = async function(fileList) {
   if (!fileList || !fileList.length) return;
-  const files = Array.from(fileList).map(f => f.webkitRelativePath || f.name);
+  const items = Array.from(fileList).map(f => {
+    const rel = f.webkitRelativePath || f.name;
+    const ext = (f.name.split('.').pop() || '').toLowerCase();
+    return { name: f.name, path: rel, ext, sizeKb: Math.max(1, Math.round((f.size || 0) / 1024)) };
+  });
+  const firstPath = items[0]?.path || '';
+  window._bkScannedFolderName = firstPath.includes('/') ? firstPath.split('/')[0] : 'Seçilen Dosyalar';
+  window._bkScannedFiles = items;
+
+  const files = items.map(x => x.path);
   const res = await api('/api/baskent-kart/ledger', { method: 'POST', body: JSON.stringify({ action: 'scan_files', files }) });
   await renderBaskentKartAuditPage(document.getElementById('pageContent'));
+  renderBaskentScannedExplorer(res.matched || 0);
+};
+
+window.renderBaskentScannedExplorer = function(matchedCount = 0, filterType = 'all') {
   const banner = document.getElementById('bkScanResultBanner');
-  if (banner) {
-    banner.style.display = 'block';
-    banner.textContent = `✔ Bilgisayarınızdan ${files.length} adet yerel dosya %100 offline olarak tarandı ve ${res.matched || 0} evrak kaydı 36 aylık dönemlerle eşleştirildi.`;
+  if (!banner) return;
+  const items = window._bkScannedFiles || [];
+  if (!items.length) {
+    banner.style.display = 'none';
+    return;
   }
+  const isPdf = x => x.ext === 'pdf';
+  const isExcel = x => ['xlsx', 'xls', 'csv', 'ods'].includes(x.ext);
+  const isDoc = x => ['doc', 'docx', 'txt', 'md', 'rtf'].includes(x.ext);
+  const pdfCount = items.filter(isPdf).length;
+  const excelCount = items.filter(isExcel).length;
+  const docCount = items.filter(isDoc).length;
+
+  const filtered = items.filter(x => {
+    if (filterType === 'pdf') return isPdf(x);
+    if (filterType === 'excel') return isExcel(x);
+    if (filterType === 'doc') return isDoc(x);
+    return true;
+  });
+
+  const iconFor = x => isPdf(x) ? '📄' : isExcel(x) ? '📊' : isDoc(x) ? '📝' : '📁';
+
+  banner.style.display = 'block';
+  banner.style.background = '#f8fafc';
+  banner.style.color = 'var(--text)';
+  banner.style.borderColor = '#bfdbfe';
+  banner.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <strong style="color:#166534">✔ Klasör Okundu: ${esc(window._bkScannedFolderName || 'Klasör')}</strong>
+        <span style="font-size:13px;color:var(--text-muted);margin-left:8px">(${items.length} dosya tarandı · ${matchedCount} evrak 36 aylık dönemle eşleşti)</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn btn-primary btn-sm" onclick="assignBaskentFolderEditTask()">🤖 PDF &amp; Excel Düzenleme Görevi Ver</button>
+      </div>
+    </div>
+    <div class="folder-summary-pills">
+      <button type="button" class="folder-pill" style="cursor:pointer;${filterType==='all'?'border-color:var(--primary);background:var(--primary-soft)':''}" onclick="renderBaskentScannedExplorer(${matchedCount},'all')">📁 Tümü (${items.length})</button>
+      <button type="button" class="folder-pill" style="cursor:pointer;${filterType==='pdf'?'border-color:var(--primary);background:var(--primary-soft)':''}" onclick="renderBaskentScannedExplorer(${matchedCount},'pdf')">📄 PDF (${pdfCount})</button>
+      <button type="button" class="folder-pill" style="cursor:pointer;${filterType==='excel'?'border-color:var(--primary);background:var(--primary-soft)':''}" onclick="renderBaskentScannedExplorer(${matchedCount},'excel')">📊 Excel / CSV (${excelCount})</button>
+      <button type="button" class="folder-pill" style="cursor:pointer;${filterType==='doc'?'border-color:var(--primary);background:var(--primary-soft)':''}" onclick="renderBaskentScannedExplorer(${matchedCount},'doc')">📝 Word / Metin (${docCount})</button>
+    </div>
+    <div class="folder-file-list">
+      ${filtered.slice(0, 300).map((f, idx) => `
+        <div class="folder-file-row">
+          <div class="folder-file-meta">
+            <span>${iconFor(f)}</span>
+            <span class="folder-file-path" title="${esc(f.path)}">${esc(f.path)}</span>
+            <span style="font-size:11.5px;color:var(--text-muted);flex-shrink:0">${f.sizeKb} KB</span>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="assignBaskentSingleFileTask('${esc(f.path)}')">🤖 Görev Ver</button>
+        </div>
+      `).join('')}
+      ${filtered.length > 300 ? `<div style="padding:8px 12px;font-size:12px;color:var(--text-muted)">...ve ${filtered.length - 300} dosya daha</div>` : ''}
+    </div>
+  `;
+};
+
+window.assignBaskentSingleFileTask = async function(filePath) {
+  await api('/api/task', {
+    method: 'POST',
+    body: JSON.stringify({
+      dept: '01-Akilli-Sehirler-Sube-Mudurlugu',
+      personnel: 'baskent-kart-proje-sorumlusu',
+      skill: 'baskent-kart-ihale-kabul-denetimi',
+      request: `Başkent Kart klasöründeki "${filePath}" dosyasını incele; PDF/Excel tutarlarını, tarihlerini ve eksiklerini düzenleyip kontrol raporunu hazırla.`,
+    }),
+  });
+  await refreshData(false);
+  navigate('agent_detail', { dept: '01-Akilli-Sehirler-Sube-Mudurlugu', slug: 'baskent-kart-proje-sorumlusu' });
+};
+
+window.assignBaskentFolderEditTask = async function() {
+  const items = window._bkScannedFiles || [];
+  const sample = items.slice(0, 25).map(x => x.path).join(', ');
+  await api('/api/task', {
+    method: 'POST',
+    body: JSON.stringify({
+      dept: '01-Akilli-Sehirler-Sube-Mudurlugu',
+      personnel: 'baskent-kart-proje-sorumlusu',
+      skill: 'baskent-kart-ihale-kabul-denetimi',
+      request: `Seçilen "${window._bkScannedFolderName}" klasöründeki ${items.length} dosyanın (PDF, Excel, dekont ve fatura listesi: ${sample}) tamamını kontrol et, tutarsız veya eksik PDF/Excel kayıtlarını düzenleme listesine çıkar.`,
+    }),
+  });
+  await refreshData(false);
+  navigate('agent_detail', { dept: '01-Akilli-Sehirler-Sube-Mudurlugu', slug: 'baskent-kart-proje-sorumlusu' });
 };
 
 window.runBaskentOfficialAuditTask = async function() {
+  const items = window._bkScannedFiles || [];
+  const extraInfo = items.length ? ` Seçili klasör: "${window._bkScannedFolderName}" (${items.length} dosya).` : '';
   const r = await api('/api/task', {
     method: 'POST',
     body: JSON.stringify({
       dept: '01-Akilli-Sehirler-Sube-Mudurlugu',
       personnel: 'baskent-kart-proje-sorumlusu',
       skill: 'baskent-kart-ihale-kabul-denetimi',
-      request: 'Başkent Kart 3 yıllık (36 ay) ihale kapanışı ve kesin kabulü kapsamında tüm fatura, banka dekontu, market/POS mutabakatı, SLA ve teknik şartname evraklarını inceleyip eksik evrak ihtar raporunu hazırla.',
+      request: 'Başkent Kart 3 yıllık (36 ay) ihale kapanışı ve kesin kabulü kapsamında tüm fatura, banka dekontu, market/POS mutabakatı, SLA ve teknik şartname evraklarını inceleyip eksik evrak ihtar raporunu hazırla.' + extraInfo,
     }),
   });
   await refreshData(false);
@@ -3570,6 +3670,19 @@ function renderProjectsHubPage(el) {
           <div style="font-size:13px;color:var(--text-muted);margin-top:6px">
             ${ws.localFiles?.length ? `✔ <strong>${esc(ws.folderName)}</strong> (${ws.localFiles.length} dosya)` : 'Henüz klasör seçilmedi.'}
           </div>
+          ${ws.localFiles?.length ? `
+            <div class="folder-file-list" style="margin-top:8px;max-height:170px">
+              ${ws.localFiles.slice(0, 120).map(f => `
+                <div class="folder-file-row">
+                  <div class="folder-file-meta">
+                    <span>${/\.pdf$/i.test(f.name) ? '📄' : /\.(xlsx?|csv|ods)$/i.test(f.name) ? '📊' : /\.(docx?|txt|md)$/i.test(f.name) ? '📝' : '📁'}</span>
+                    <span class="folder-file-path" title="${esc(f.path)}">${esc(f.path)}</span>
+                  </div>
+                  <span style="font-size:11.5px;color:var(--text-muted)">${f.sizeKb} KB</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
         </div>
         <div>
           <label class="field-label">🐙 GitHub Deposu (Repo Linki)</label>
@@ -3644,7 +3757,7 @@ window.hubSelectFolder = async function(fileList) {
   const ws = getProjectsHubStore();
   const fp = fileList[0].webkitRelativePath || fileList[0].name;
   ws.folderName = fp.includes('/') ? fp.split('/')[0] : 'Seçilen Klasör';
-  ws.localFiles = Array.from(fileList).slice(0, 150).map(f => ({ name: f.name, path: f.webkitRelativePath || f.name, sizeKb: Math.max(1, Math.round(f.size / 1024)) }));
+  ws.localFiles = Array.from(fileList).slice(0, 2000).map(f => ({ name: f.name, path: f.webkitRelativePath || f.name, sizeKb: Math.max(1, Math.round(f.size / 1024)) }));
   saveProjectsHubStore(ws);
   showToast(`${ws.localFiles.length} dosya proje çalışma alanına eklendi.`, 'ok');
   renderProjectsHubPage(document.getElementById('pageContent'));
@@ -4262,4 +4375,76 @@ if (document.readyState === 'loading') {
 } else {
   applyAdaptiveLayout();
 }
+
+// ============================================================================
+// HIZLI ARAÇLAR MENÜSÜ, PWA MASAÜSTÜ UYGULAMASI & .BAT BAŞLATICI
+// ============================================================================
+window._deferredPwaPrompt = null;
+
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window._deferredPwaPrompt = e;
+});
+
+window.toggleQuickToolsMenu = function() {
+  const dd = document.getElementById('quickToolsDropdown');
+  if (!dd) return;
+  dd.style.display = dd.style.display === 'flex' ? 'none' : 'flex';
+};
+
+window.closeQuickToolsMenu = function() {
+  const dd = document.getElementById('quickToolsDropdown');
+  if (dd) dd.style.display = 'none';
+};
+
+document.addEventListener('click', (e) => {
+  const wrap = document.querySelector('.quick-tools-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    closeQuickToolsMenu();
+  }
+});
+
+window.triggerPwaInstall = async function() {
+  if (window._deferredPwaPrompt) {
+    window._deferredPwaPrompt.prompt();
+    const res = await window._deferredPwaPrompt.userChoice;
+    window._deferredPwaPrompt = null;
+    if (res?.outcome === 'accepted' && typeof showToast === 'function') {
+      showToast('Uygulama masaüstüne / ana ekrana eklendi!', 'ok');
+    }
+    return;
+  }
+  alert(
+    'Masaüstü / Telefon Uygulaması Kurulumu:\n\n' +
+    '• Bilgisayarda (Chrome / Edge): Adres çubuğunun sağındaki "Yükle" (bilgisayar + aşağı ok) ikonuna tıklayın. Masaüstünüze ikonlu uygulama olarak kurulur ve tarayıcı çubuğu olmadan açılır.\n' +
+    '• Telefonda: Tarayıcı menüsünden "Ana Ekrana Ekle" / "Uygulamayı Yükle" seçeneğini kullanın.'
+  );
+};
+
+window.downloadDesktopLauncherBat = function() {
+  const originUrl = location.origin && location.origin.startsWith('http') ? location.origin : 'http://127.0.0.1:4400';
+  const bat = [
+    '@echo off',
+    'title Kurumsal Dijital Ikiz Platformu',
+    'where msedge >nul 2>&1 && (start "" msedge --app=' + originUrl + ' & exit)',
+    'where chrome >nul 2>&1 && (start "" chrome --app=' + originUrl + ' & exit)',
+    'start "" "' + originUrl + '"',
+    '',
+  ].join('\r\n');
+  const blob = new Blob([bat], { type: 'application/bat;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Dijital-Ikiz-Masaustu-Uygulamasi.bat';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  if (typeof showToast === 'function') {
+    showToast('Masaüstü uygulama başlatıcısı (.bat) indirildi. Masaüstünüze kaydedip çift tıklayarak pencere modunda açabilirsiniz.', 'ok');
+  }
+};
+
 

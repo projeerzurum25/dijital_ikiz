@@ -362,15 +362,27 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
   </div>
 
   <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('projects', this)">📂 Projeler, Kaynaklar (Klasör/GitHub/Drive/Linkler) & Zamanlanmış Görevler</button>
-    <button class="nav-tab" onclick="switchTab('baskent', this)">📂 Projeler (Başkent Kart · MucitHub IoT · Başkent Ailem · MucitLab)</button>
-    <button class="nav-tab" onclick="switchTab('org', this)">🏢 5 Şube Müdürlüğü & Proje Yönetimi Ekibi</button>
-    <button class="nav-tab" onclick="switchTab('chat', this)">💬 Ajanlarla Sesli & Yazılı İletişim</button>
-    <button class="nav-tab" onclick="switchTab('spec', this)">📋 Teknik Şartname Kesin Kabul Kriterleri (10 Madde)</button>
-    <button class="nav-tab" onclick="switchTab('security', this)">🔒 Gizlilik, İzinler & Sistem (20 Öncelik)</button>
+    <button class="nav-tab active" onclick="switchTab('projects', this)">📂 Klasör, PDF/Excel &amp; Görevler</button>
+    <button class="nav-tab" onclick="switchTab('baskent', this)">💳 Başkent Kart &amp; Projeler</button>
+    <button class="nav-tab" onclick="switchTab('office3d', this)">🏙️ 3D Yönetim Ofisi</button>
+    <button class="nav-tab" onclick="switchTab('org', this)">🏢 Müdürlükler &amp; Ajanlar</button>
+    <button class="nav-tab" onclick="switchTab('chat', this)">💬 Ajan İletişimi</button>
+    <button class="nav-tab" onclick="switchTab('spec', this)">📋 Şartname &amp; Güvenlik</button>
   </nav>
 
   <main class="container">
+    <section id="tab-office3d" style="display:none">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+          <div>
+            <h2 style="margin:0">🏙️ 3D Sanal Yönetim Ofisi — Müdürlükler &amp; Uzman Ajanlar</h2>
+            <p style="margin:4px 0 0;color:var(--muted);font-size:13.5px">Kurumunuzdaki şube müdürlüklerini ve ajan masalarını 3D ofis görünümünde inceleyin; üzerine tıklayarak doğrudan görev veya mesaj gönderin.</p>
+          </div>
+          <button class="btn btn-primary" onclick="drawOffline3DOffice()">🔄 Ofisi Yenile</button>
+        </div>
+        <canvas id="offline3dCanvas" width="1100" height="460" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--border);background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%)"></canvas>
+      </div>
+    </section>
     <!-- SEKME 0: PROJELER, KAYNAKLAR (KLASÖR / GITHUB / GOOGLE DRIVE / EK LİNKLER), ZAMANLANMIŞ & MULTİDİSİPLİNER GÖREVLER -->
     <section id="tab-projects">
       <div class="card">
@@ -634,12 +646,68 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
     }
 
     function switchTab(id, btn) {
-      ['projects', 'baskent', 'org', 'chat', 'spec', 'security'].forEach(t => {
+      ['projects', 'baskent', 'office3d', 'org', 'chat', 'spec', 'security'].forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) el.style.display = (t === id) ? 'block' : 'none';
       });
       document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
+      if (id === 'office3d') drawOffline3DOffice();
+    }
+
+    function drawOffline3DOffice() {
+      const c = document.getElementById('offline3dCanvas');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Zemin ızgarası (izometrik 3D ofis zemini)
+      ctx.strokeStyle = 'rgba(148,163,184,0.14)';
+      ctx.lineWidth = 1;
+      for (let i = -10; i <= 20; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 70, H * 0.45);
+        ctx.lineTo(i * 70 + 260, H);
+        ctx.stroke();
+      }
+
+      const depts = BUNDLE.departments || [];
+      const cols = Math.max(1, Math.min(3, depts.length || 1));
+      const boxW = Math.floor((W - 80) / cols) - 20;
+      depts.slice(0, 6).forEach((d, idx) => {
+        const col = idx % cols;
+        const row = Math.floor(idx / cols);
+        const x = 40 + col * (boxW + 24);
+        const y = 36 + row * 205;
+        // 3D gölge ve oda kutusu
+        ctx.fillStyle = 'rgba(30,58,138,0.42)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(x, y, boxW, 178, 14);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 14px system-ui, sans-serif';
+        ctx.fillText('🏢 ' + (d.title || d.slug).slice(0, 32), x + 14, y + 26);
+
+        const agents = (BUNDLE.personnel || []).filter(p => p.dept === d.slug).slice(0, 6);
+        agents.forEach((p, ai) => {
+          const ax = x + 14 + (ai % 2) * ((boxW - 36) / 2);
+          const ay = y + 46 + Math.floor(ai / 2) * 40;
+          ctx.fillStyle = 'rgba(255,255,255,0.12)';
+          ctx.fillRect(ax, ay, (boxW - 44) / 2, 32);
+          ctx.fillStyle = '#4ade80';
+          ctx.beginPath();
+          ctx.arc(ax + 12, ay + 16, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#e2e8f0';
+          ctx.font = '12px system-ui, sans-serif';
+          ctx.fillText((p.title || p.slug).slice(0, 18), ax + 22, ay + 20);
+        });
+      });
     }
 
     function evaluateAudit() {
@@ -1042,7 +1110,7 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
       const firstPath = fileList[0].webkitRelativePath || fileList[0].name;
       ws.folderName = firstPath.includes('/') ? firstPath.split('/')[0] : 'Seçilen Yerel Klasör';
       const filesArr = [];
-      for (const f of Array.from(fileList).slice(0, 200)) {
+      for (const f of Array.from(fileList).slice(0, 1000)) {
         let preview = '';
         if (/\\.(txt|md|csv|json|xml|html|log)$/i.test(f.name) && f.size < 250000) {
           try { preview = (await f.text()).slice(0, 400); } catch (e) {}
@@ -1094,9 +1162,19 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
 
       const fSum = document.getElementById('projFolderSummary');
       if (fSum) {
-        fSum.innerHTML = ws.localFiles?.length
-          ? '<strong>✔ ' + esc(ws.folderName) + '</strong> (' + ws.localFiles.length + ' dosya seçildi: ' + ws.localFiles.slice(0, 4).map(f => esc(f.name)).join(', ') + (ws.localFiles.length > 4 ? '...' : '') + ')'
-          : 'Henüz yerel klasör seçilmedi.';
+        if (ws.localFiles?.length) {
+          const pdfs = ws.localFiles.filter(f => /\\.pdf$/i.test(f.name)).length;
+          const excels = ws.localFiles.filter(f => /\\.(xlsx?|csv|ods)$/i.test(f.name)).length;
+          fSum.innerHTML = '<strong>✔ ' + esc(ws.folderName) + '</strong> (' + ws.localFiles.length + ' dosya · 📄 PDF: ' + pdfs + ' · 📊 Excel/CSV: ' + excels + ')' +
+            '<div style="max-height:190px;overflow-y:auto;margin-top:8px;border:1px solid var(--border);border-radius:8px;background:#fff">' +
+            ws.localFiles.slice(0, 250).map(f => {
+              const ic = /\\.pdf$/i.test(f.name) ? '📄' : /\\.(xlsx?|csv|ods)$/i.test(f.name) ? '📊' : '📁';
+              return '<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12.5px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + ic + ' ' + esc(f.path) + '</span><span style="color:var(--muted);flex-shrink:0">' + f.sizeKb + ' KB</span></div>';
+            }).join('') +
+            '</div>';
+        } else {
+          fSum.innerHTML = 'Henüz yerel klasör seçilmedi.';
+        }
       }
 
       const linksBox = document.getElementById('projExtraLinksList');

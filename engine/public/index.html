@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#1e3a8a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/app-icon.svg" />
+  <link rel="apple-touch-icon" href="/app-icon.svg" />
   <title>Kurumsal Dijital İkiz Platformu v4.0 — %100 Yerel 3D Sanal Ofis ve Yapay Zeka Yönetim Sistemi</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -568,14 +571,11 @@
       </div>
 
       <div class="header-controls">
-        <!-- ÜYELİK PAKETİ ROZETİ -->
-        <span id="demoPlanBadge" class="status-badge warn" style="display:none"></span>
-
         <!-- 3 KATMANLI ROL / PANEL GEÇİŞİ (SADECE GENEL ADMİN) -->
         <div id="headerRoleSwitcher" class="role-switcher" style="display:none" title="Görüntülemek istediğiniz yönetim veya kullanıcı katmanını seçin">
-          <button class="role-btn" data-role="citizen" onclick="switchRole('citizen')">🌐 Vatandaş Portalı</button>
-          <button class="role-btn active" data-role="tenant_admin" onclick="switchRole('tenant_admin')">🏢 Kurum Admini</button>
-          <button class="role-btn" data-role="super_admin" onclick="switchRole('super_admin')">👑 Genel Admin</button>
+          <button class="role-btn" data-role="citizen" onclick="switchRole('citizen')">🌐 Vatandaş</button>
+          <button class="role-btn active" data-role="tenant_admin" onclick="switchRole('tenant_admin')">🏢 Kurum</button>
+          <button class="role-btn" data-role="super_admin" onclick="switchRole('super_admin')">👑 Genel</button>
         </div>
 
         <!-- AKTİF KURUM SEÇİCİ (SADECE GENEL ADMİN) -->
@@ -584,24 +584,38 @@
           <select id="tenantSelect" onchange="onTenantChange(this.value)"></select>
         </div>
 
-        <span id="llmStatusBadge" class="status-badge ok">🧠 Yerel Beyin Hazır</span>
-        <span id="connStatusBadge" class="status-badge ok" title="Ağ / Offline Çalışma Durumu">🔌 Yerel Offline Hazır</span>
-
         <button class="btn btn-sm" id="notifBellBtn" onclick="toggleNotifDrawer()" title="Bildirim Merkezi">
-          🔔 Bildirimler <span id="notifBadgeCount" class="nav-count">2</span>
+          🔔 <span id="notifBadgeCount" class="nav-count">2</span>
         </button>
 
-        <button class="btn btn-sm ui-settings-trigger" onclick="openLayoutSettings()" title="Menü Yapısını ve Ekran Tasarımını Ayarla">
-          📱 Menü &amp; Tasarım
-        </button>
+        <div class="quick-tools-wrap">
+          <button type="button" class="btn btn-primary btn-sm" id="quickToolsBtn" onclick="toggleQuickToolsMenu()" title="Masaüstü Uygulaması, Offline Paket ve Görünüm Araçları">
+            ⚙️ Araçlar &amp; Uygulama ▾
+          </button>
+          <div id="quickToolsDropdown" class="quick-tools-dropdown" style="display:none">
+            <div class="qt-status-row">
+              <span id="demoPlanBadge" class="status-badge warn" style="display:none"></span>
+              <span id="llmStatusBadge" class="status-badge ok">🧠 Yerel Beyin Hazır</span>
+              <span id="connStatusBadge" class="status-badge ok">🔌 Offline Hazır</span>
+            </div>
+            <button type="button" class="qt-item" id="pwaInstallBtn" onclick="closeQuickToolsMenu(); triggerPwaInstall()">
+              📲 Masaüstüne Uygulama Olarak Kur (İkonlu)
+            </button>
+            <button type="button" class="qt-item" onclick="closeQuickToolsMenu(); downloadDesktopLauncherBat()">
+              🪟 Masaüstü Uygulama Başlatıcı İndir (.bat)
+            </button>
+            <button type="button" class="qt-item" onclick="closeQuickToolsMenu(); downloadCurrentTenantOfflineApp()">
+              💻 Tam Offline Paket İndir (.html)
+            </button>
+            <button type="button" class="qt-item" onclick="closeQuickToolsMenu(); openLayoutSettings()">
+              📱 Menü &amp; Ekran Tasarımı (Hamburger / Normal)
+            </button>
+            <button type="button" class="qt-item" onclick="closeQuickToolsMenu(); startOnboardingTour()">
+              🧭 Öğretici Rehber
+            </button>
+          </div>
+        </div>
 
-        <button class="btn btn-primary btn-sm header-download-btn" onclick="downloadCurrentTenantOfflineApp()" title="Üye olduğunuz paketi bilgisayarınıza indirip sunucusuz ve linksiz çalıştırın">
-          💻 Üyelik Paketini Bilgisayara İndir (.html)
-        </button>
-
-        <button class="btn btn-sm" onclick="startOnboardingTour()" title="Adım Adım Kullanım Rehberini Aç">
-          🧭 Öğretici Rehber
-        </button>
         <button class="btn btn-sm" onclick="logoutToLanding()" title="Tanıtım ve Giriş Sayfasına Dön">
           🚪 Çıkış
         </button>

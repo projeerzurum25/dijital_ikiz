@@ -1,0 +1,18 @@
+{
+  "name": "Kurumsal Dijital İkiz Platformu",
+  "short_name": "Dijital İkiz",
+  "description": "%100 Yerel, Çok Kurumlu 3D Sanal Ofis, Müdürlük & Evrak Yönetim Uygulaması",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
