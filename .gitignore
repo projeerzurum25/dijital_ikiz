@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+tenants/*/.runtime/
+tenants/*/.env.vault
+indirilebilir-kurum-paketleri/

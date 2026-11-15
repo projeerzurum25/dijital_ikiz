@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "ad_soyad": "Platform Baş Yöneticisi (Süper Admin)",
+    "eposta": "superadmin@dijital-ikiz.local",
+    "unvan": "Baş Sistem Mimarı & Genel Admin",
+    "yetki": "Tam Yetki (Tüm Kurumlar & Çekirdek)",
+    "durum": "Aktif"
+  },
+  {
+    "id": 2,
+    "ad_soyad": "Güvenlik & Denetim Yöneticisi",
+    "eposta": "guvenlik@dijital-ikiz.local",
+    "unvan": "Sıfır-Güven & İzolasyon Denetçisi",
+    "yetki": "Güvenlik, /doctor ve Denetim İzi",
+    "durum": "Aktif"
+  }
+]

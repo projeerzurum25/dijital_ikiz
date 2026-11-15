@@ -1,0 +1,52 @@
+{
+  "version": "4.0",
+  "description": "İnternet kesintisinde ve offline modda LLM yönlendirme sırası. Cloud varsayılan olarak devre dışıdır.",
+  "order": [
+    "ollama",
+    "vllm",
+    "fallback-engine"
+  ],
+  "providers": {
+    "ollama": {
+      "type": "ollama",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:11434",
+      "timeoutMs": 180000,
+      "models": {
+        "default": "qwen2.5:7b",
+        "light": "qwen2.5:3b",
+        "high": "qwen2.5:14b",
+        "vision": "llava:7b",
+        "embed": "nomic-embed-text"
+      }
+    },
+    "vllm": {
+      "type": "openai-compatible",
+      "enabled": false,
+      "baseUrl": "http://127.0.0.1:8000/v1",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "timeoutMs": 180000
+    },
+    "fallback-engine": {
+      "type": "rule-skill-engine",
+      "enabled": true,
+      "description": "LLM yokken skill betiklerini çalıştırır, verileri tablolar ve şablonlarla raporlar."
+    },
+    "cloud": {
+      "type": "disabled",
+      "enabled": false,
+      "note": "Cloud modu yalnızca Süper Admin açık onayı + tenant-config.llm.allowCloud=true ile açılabilir. Bu kurulumda kapalıdır."
+    }
+  },
+  "effort": {
+    "high": [
+      "02-Strateji-ve-Arastirma",
+      "04-Yazilim-ve-Mimari",
+      "05-Test-QA-ve-Guvenlik"
+    ],
+    "low": [
+      "07-Icerik-ve-Medya"
+    ]
+  },
+  "healthCheckSeconds": 30
+}

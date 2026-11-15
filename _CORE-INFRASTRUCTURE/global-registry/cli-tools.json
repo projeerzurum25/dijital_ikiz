@@ -1,0 +1,103 @@
+{
+  "policy": "Araç önceliği: CLI > MCP > Plugin > Browser Fallback. offline=true olmayan araçlar yalnızca online modda kullanılır.",
+  "tools": [
+    {
+      "name": "node",
+      "purpose": "Skill betikleri, motor",
+      "offline": true,
+      "check": "node --version"
+    },
+    {
+      "name": "git",
+      "purpose": "Sürüm kontrolü, worktree, geri alma",
+      "offline": true,
+      "check": "git --version"
+    },
+    {
+      "name": "docker",
+      "purpose": "İzole servisler",
+      "offline": true,
+      "check": "docker --version"
+    },
+    {
+      "name": "ollama",
+      "purpose": "Yerel LLM",
+      "offline": true,
+      "check": "ollama --version"
+    },
+    {
+      "name": "ffmpeg",
+      "purpose": "Video/ses işleme (eğitim kanalı 3-5)",
+      "offline": true,
+      "check": "ffmpeg -version"
+    },
+    {
+      "name": "whisper-cli",
+      "purpose": "Offline konuşma→metin (whisper.cpp)",
+      "offline": true,
+      "check": "whisper-cli --help"
+    },
+    {
+      "name": "pdftotext",
+      "purpose": "PDF metin çıkarımı (Poppler)",
+      "offline": true,
+      "check": "pdftotext -v"
+    },
+    {
+      "name": "mmdc",
+      "purpose": "Mermaid CLI",
+      "offline": true,
+      "check": "mmdc --version"
+    },
+    {
+      "name": "npx playwright",
+      "purpose": "E2E test ve UI playbook",
+      "offline": true,
+      "check": "npx playwright --version"
+    },
+    {
+      "name": "semgrep",
+      "purpose": "SAST",
+      "offline": true,
+      "check": "semgrep --version"
+    },
+    {
+      "name": "gh",
+      "purpose": "GitHub CLI",
+      "offline": false,
+      "check": "gh --version"
+    },
+    {
+      "name": "firecrawl",
+      "purpose": "Web tarama",
+      "offline": false,
+      "check": "firecrawl --version"
+    },
+    {
+      "name": "yt-dlp",
+      "purpose": "Video indirme",
+      "offline": false,
+      "check": "yt-dlp --version"
+    },
+    {
+      "name": "linear / jira",
+      "purpose": "Proje yönetimi",
+      "offline": false
+    },
+    {
+      "name": "supabase",
+      "purpose": "Veritabanı CLI",
+      "offline": false
+    },
+    {
+      "name": "stripe",
+      "purpose": "Ödeme/fatura",
+      "offline": false
+    },
+    {
+      "name": "lighthouse",
+      "purpose": "Web performans/SEO",
+      "offline": true
+    }
+  ]
+}

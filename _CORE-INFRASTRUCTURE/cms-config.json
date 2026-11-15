@@ -1,0 +1,158 @@
+{
+  "siteTitle": "Kurumsal Dijital İkiz Platformu",
+  "siteSubtitle": "%100 Offline Çalışabilen Kurumsal Sanal Ofis, Ajan İletişimi ve Evrak Denetim Sistemi",
+  "primaryColor": "#1e3a8a",
+  "newsletterTitle": "Güncel Kurumumuz Hakkında Bilgiler ve Bilgilendirmeler Edinmek İstiyorsanız E-posta Adresinizi Bırakın",
+  "newsletterDesc": "Yeni yayınlanan offline denetim modülleri, kamu ihale/şartname kontrol şablonları, 3D sanal ofis güncellemeleri ve kurumsal duyurulardan haberdar olmak için e-posta adresinizi kaydedebilirsiniz.",
+  "topMenu": [
+    {
+      "label": "Hakkımızda",
+      "href": "#hakkimizda"
+    },
+    {
+      "label": "Üyelik Paketleri",
+      "href": "#paketler"
+    },
+    {
+      "label": "Nasıl Çalışır",
+      "href": "#nasil-calisir"
+    },
+    {
+      "label": "İletişim",
+      "href": "#iletisim"
+    }
+  ],
+  "slides": [
+    {
+      "badge": "Hakkımızda · %100 Yerel (Offline) ve KVKK Tam Uyumlu Mimari",
+      "title": "Kurumunuzun Dijital İkizini, Sanal Ofisini ve Denetim Süreçlerini Kendi Bilgisayarınızda Yönetin",
+      "lead": "Kurumsal Dijital İkiz Platformu; kamu kurumları, belediyeler, daire başkanlıkları ve özel sektör kuruluşlarının hiçbir verisini dış bulut sunucularına çıkarmadan, doğrudan kendi bilgisayarlarında %100 offline çalıştırabilmeleri için geliştirilmiş yeni nesil kurumsal yönetim sistemidir."
+    },
+    {
+      "badge": "Kamu & Kurumsal Denetim · ABB Bilgi İşlem Başkent Kart Referans Mimari",
+      "title": "3 Yıllık İhale Kapanışı, Fatura, Banka Dekontu ve Teknik Şartname Kontrolünü Saniyeler İçinde Tamamlayın",
+      "lead": "Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı — Akıllı Şehirler Şube Müdürlüğü — Proje Yönetimi Ekibi bünyesindeki Başkent Kart projesi gibi çok yıllı ihalelerde; 36 aylık tüm fatura, dekont, POS mutabakatı ve SLA raporlarını eksiksiz denetleyin."
+    },
+    {
+      "badge": "Taşınabilir Masaüstü Paketi · İnternetsiz ve Sunucusuz Çalışma",
+      "title": "Üyeliğinizi Oluşturun, Paketinizi Bilgisayarınıza İndirin ve Sadece O Bilgisayarda Offline Uygulayın",
+      "lead": "İhtiyacınıza uygun üyelik paketini seçerek kayıt olduktan veya giriş yaptıktan sonra, kurumunuza özel üretilen bağımsız sistem dosyasını bilgisayarınıza indirebilir; internet bağlantısına veya dış linke ihtiyaç duymadan kendi masaüstünüzde çalıştırabilirsiniz."
+    }
+  ],
+  "packages": [
+    {
+      "tier": "starter",
+      "tag": "1. Üyelik Tipi · Küçük Ekipler ve Birimler",
+      "name": "Başlangıç Paketi",
+      "priceMonthly": "₺4.900",
+      "priceYearly": "₺49.000 / yıl",
+      "desc": "Birim bazlı dijital ikiz, sesli ajan iletişimi ve yıllık evrak kontrolü için başlangıç paketi.",
+      "maxDepartments": 2,
+      "maxAgents": 3,
+      "maxAuditMonths": 12,
+      "maxUsers": 5
+    },
+    {
+      "tier": "pro",
+      "tag": "2. Üyelik Tipi · Orta Ölçekli Kurumlar",
+      "name": "Profesyonel Kurum Paketi",
+      "priceMonthly": "₺14.900",
+      "priceYearly": "₺149.000 / yıl",
+      "desc": "Çok müdürlüklü kurumlar ve çok yıllı sözleşme/hak ediş denetimi yürüten yapılar için.",
+      "maxDepartments": 5,
+      "maxAgents": 12,
+      "maxAuditMonths": 24,
+      "maxUsers": 25
+    },
+    {
+      "tier": "full",
+      "tag": "3. Üyelik Tipi · ABB Bilgi İşlem & Başkent Kart Full Paket",
+      "name": "Full Kurumsal & Kamu Paketi",
+      "priceMonthly": "₺34.900",
+      "priceYearly": "₺349.000 / yıl",
+      "desc": "Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı (Başkent Kart Projesi), bakanlıklar ve holdingler için tam kapasite paket.",
+      "maxDepartments": 99,
+      "maxAgents": 99,
+      "maxAuditMonths": 36,
+      "maxUsers": 999
+    }
+  ],
+  "mediaBlocks": [
+    {
+      "id": "media-1",
+      "type": "image",
+      "title": "3D Kesitli Kurumsal Sanal Ofis ve Kampüs Simülasyonu",
+      "desc": "Müdürlüklerin, toplantı odasının ve uzman ajanların 360° interaktif 3D görünümü.",
+      "url": "svg://virtual-office-banner",
+      "targetPage": "all",
+      "active": true
+    },
+    {
+      "id": "media-2",
+      "type": "video",
+      "title": "Başkent Kart 3 Yıllık (36 Ay) İhale Kapanışı ve Evrak Denetim Tanıtım Videosu",
+      "desc": "Fatura, banka dekontu, market/POS mutabakatı ve teknik şartname kontrolünün adım adım işleyişi.",
+      "url": "video://baskent-kart-demo",
+      "targetPage": "all",
+      "active": true
+    }
+  ],
+  "codeBlocks": [
+    {
+      "id": "code-1",
+      "title": "Kurumsal SLA & Canlı Sistem Durum Rozeti (Özel HTML/CSS/JS Modülü)",
+      "targetPage": "crm_overview",
+      "htmlCode": "<div style=\"padding:12px 18px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px\"><strong>⚡ Özel Kurumsal Kod Bloğu Aktif:</strong><span>%100 Offline Sıfır-Güven Motoru · Hedef SLA: %99.95 · Aktif Kriptografik Kasa: AES-256-GCM</span></div>",
+      "cssCode": "",
+      "jsCode": "",
+      "active": true
+    }
+  ],
+  "crmModules": {
+    "virtualOffice3D": true,
+    "voiceChat": true,
+    "baskentAudit": true,
+    "training6Ch": true,
+    "citizenPortal": true,
+    "rbacUsers": true,
+    "approvalsGate": true,
+    "sqlExplorer": true,
+    "readiness20": true,
+    "analyticsCrash": true
+  },
+  "customPages": [
+    {
+      "id": "page-kurumsal-mimari",
+      "slug": "kurumsal-mimari-ve-guvenlik",
+      "title": "Sıfır-Güven & Offline Mimari",
+      "menuLocation": "both",
+      "subtitle": "Kurumsal Dijital İkiz Platformunun %100 yerel çalışma, şifreli kasa ve çok-kurumlu izolasyon mimarisi.",
+      "contentHtml": "<h3>%100 Offline ve Sıfır-Güven (Zero-Trust) Mimari</h3><p>Bu sayfa Genel Admin CMS & Sayfa Yöneticisi üzerinden dinamik olarak yönetilmektedir. Tüm kurum verileri kendi izole klasöründe (<code>tenants/&lt;kurum&gt;/</code>) ve AES-256-GCM şifreli kasasında saklanır.</p><ul><li><strong>Veri İzolasyonu:</strong> Kurumlar arası dosya ve tablo erişimi fiziksel olarak ayrılmıştır.</li><li><strong>SHA-256 Denetim Zinciri:</strong> Yapılan her işlem kriptografik özet zinciriyle imzalanır.</li><li><strong>Masaüstü İndirilebilir Paket:</strong> Üye girişi sonrası tek dosya (<code>.html</code>) olarak bilgisayara indirilebilir.</li></ul>",
+      "imageUrl": "svg://architecture-diagram",
+      "videoUrl": "video://security-demo",
+      "customCode": "<div style=\"padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#166534;font-weight:600\">✔ Bu sayfa Genel Admin Paneli → Web Sitesi & CRM Sayfa Yöneticisi üzerinden düzenlenebilir.</div>",
+      "enabledModules": [
+        "readiness20",
+        "virtualOffice3D"
+      ],
+      "createdAt": "2026-11-15T09:11:10.467Z"
+    }
+  ],
+  "privacyPolicyText": "6698 SAYILI KİŞİSEL VERİLERİN KORUNMASI KANUNU (KVKK) AYDINLATMA METNİ VE GİZLİLİK POLİTİKASI\n\n1. Veri Sorumlusu ve %100 Yerel (Offline) Çalışma Prensibi:\nKurumsal Dijital İkiz Platformu v4.0, Sıfır-Güven (Zero-Trust) mimarisiyle tasarlanmıştır. Kurumunuza ait hiçbir evrak, fatura, banka dekontu, personel bilgisi veya ses kaydı dış bulut sunucularına aktarılmaz; tamamı kendi bilgisayarınızda veya yerel kurum sunucunuzda işlenir.\n\n2. Kullanıcı İzinleri:\n- Mikrofon İzni: Yalnızca uzman ajanlarla sesli konuşma (STT) butonuna bastığınızda tarayıcı/cihaz üzerinde kullanılır.\n- Yerel Klasör/Dosya Okuma İzni: Yalnızca 3 yıllık ihale/fatura/dekont denetimi veya 6 kanallı eğitim sırasında seçtiğiniz klasörleri yerel olarak taramak için kullanılır.\n- Bildirim İzni: Ajan görev tamamlama ve eksik evrak uyarılarını masaüstünüzde göstermek için kullanılır.\n\n3. Veri Güvenliği ve Saklama:\nŞifreler scrypt algoritmasıyla, kurumsal sırlar AES-256-GCM ile şifrelenir. Tüm işlemler SHA-256 denetim zincirine kaydedilir.\n\n4. Hesap Silme ve Unutulma Hakkı (Madde 3):\nHer kullanıcı ve kurum yöneticisi, profil/hesap ayarlarından veya Genel Admin panelinden \"Hesabımı ve Verilerimi Kalıcı Olarak Sil\" seçeneğiyle tüm kayıtlarını anında silebilir.",
+  "subscribers": [
+    "bilgi@ankara.bel.tr",
+    "kurumsal@abc.sistem.com"
+  ],
+  "otpCodes": {},
+  "analytics": {
+    "pageViews": 248,
+    "taskRuns": 64,
+    "voiceSessions": 29,
+    "offlineExports": 18,
+    "avgLatencyMs": 112,
+    "crashCount": 0,
+    "crashLogs": [],
+    "uatLastRun": "2026-11-15T09:11:10.467Z",
+    "uatScore": "20 / 20 (%100 Tam Uyumlu)"
+  }
+}

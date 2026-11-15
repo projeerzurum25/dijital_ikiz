@@ -1,0 +1,60 @@
+{
+  "policy": "Resmi CLI varsa MCP kurulmaz. Offline modda yalnızca yerel (stdio) MCP sunucuları etkinleşir.",
+  "servers": [
+    {
+      "name": "local-sqlite",
+      "transport": "stdio",
+      "offline": true,
+      "enabled": true,
+      "note": "Kurum ERP/CRM veritabanı (motor içi SQL Guard)"
+    },
+    {
+      "name": "local-files",
+      "transport": "stdio",
+      "offline": true,
+      "enabled": true,
+      "note": "Kurum klasörü, izole"
+    },
+    {
+      "name": "miro",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "canva",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "notion",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "n8n",
+      "offline": true,
+      "enabled": false,
+      "note": "Yerel n8n kurulursa"
+    },
+    {
+      "name": "google-analytics",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "meta-google-ads",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "gmail-workspace",
+      "offline": false,
+      "enabled": false
+    },
+    {
+      "name": "context7",
+      "offline": false,
+      "enabled": false
+    }
+  ]
+}

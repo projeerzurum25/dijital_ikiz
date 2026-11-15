@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurumsal Dijital İkiz Platformu v4.0 — %100 Yerel 3D Sanal Ofis ve Yapay Zeka Yönetim Sistemi</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="globalLoadingBar" class="global-loading-bar"></div>
+  <div id="toastStack" class="toast-stack"></div>
+
+  <!-- ========================================================================
+       1. GİRİŞ ÖNCESİ KURUMSAL TANITIM SAYFASI (LANDING PAGE)
+       ======================================================================== -->
+  <div id="landingView" class="landing-wrapper">
+    <!-- ÜST MENÜ: HAKKIMIZDA, ÜYELİK PAKETLERİ, NASIL ÇALIŞIR, İLETİŞİM + SADECE "GİRİŞ YAP" BUTONU (İKONSUZ, LACİVERT) -->
+    <nav class="landing-nav">
+      <div class="brand-area">
+        <div class="brand-mark">İ</div>
+        <div>
+          <div class="brand-title">Kurumsal Dijital İkiz Platformu</div>
+          <div class="brand-subtitle">%100 Offline Çalışabilen Kurumsal Sanal Ofis, Ajan İletişimi ve Evrak Denetim Sistemi</div>
+        </div>
+      </div>
+
+      <div class="landing-links">
+        <a href="#hakkimizda">Hakkımızda</a>
+        <a href="#paketler">Üyelik Paketleri</a>
+        <a href="#nasil-calisir">Nasıl Çalışır</a>
+        <a href="#iletisim">İletişim</a>
+        <button class="btn-login-nav" onclick="openAuthModal('login')">Giriş Yap</button>
+      </div>
+    </nav>
+
+    <!-- ANASAYFA İLK BİLGİLENDİRME SLIDER ALANI (SAĞ TARAFTA AYRIYETEN YETENEKLER KUTUSU YOKTUR) -->
+    <section id="hakkimizda" class="landing-hero">
+      <div class="hero-slider-box">
+        <!-- SLAYT 1: HAKKIMIZDA & KURUMSAL DİJİTAL İKİZ VİZYONU -->
+        <div class="hero-slide active" id="heroSlide0">
+          <span class="hero-badge">Hakkımızda · %100 Yerel (Offline) ve KVKK Tam Uyumlu Mimari</span>
+          <h1>Kurumunuzun Dijital İkizini, Sanal Ofisini ve Denetim Süreçlerini Kendi Bilgisayarınızda Yönetin</h1>
+          <p class="lead">
+            Kurumsal Dijital İkiz Platformu; kamu kurumları, belediyeler, daire başkanlıkları ve özel sektör kuruluşlarının hiçbir verisini dış bulut sunucularına çıkarmadan, doğrudan kendi bilgisayarlarında %100 offline çalıştırabilmeleri için geliştirilmiş yeni nesil kurumsal yönetim sistemidir.
+          </p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <button class="btn" style="background:#ffffff;color:var(--primary);border:none;padding:13px 28px;font-weight:800" onclick="openAuthModal('login')">
+              Giriş Yap
+            </button>
+            <a href="#paketler" class="btn" style="background:rgba(255,255,255,0.14);color:#ffffff;border:1px solid rgba(255,255,255,0.35);text-decoration:none;padding:13px 26px">
+              Üyelik Paketlerini İncele
+            </a>
+          </div>
+        </div>
+
+        <!-- SLAYT 2: KAMU VE KURUMSAL EVRAK / İHALE KAPANIŞ DENETİMİ -->
+        <div class="hero-slide" id="heroSlide1">
+          <span class="hero-badge">Kamu & Kurumsal Denetim · ABB Bilgi İşlem Başkent Kart Referans Mimari</span>
+          <h1>3 Yıllık İhale Kapanışı, Fatura, Banka Dekontu ve Teknik Şartname Kontrolünü Saniyeler İçinde Tamamlayın</h1>
+          <p class="lead">
+            Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı — Akıllı Şehirler Şube Müdürlüğü — Proje Yönetimi Ekibi bünyesindeki Başkent Kart projesi gibi çok yıllı ihalelerde; 36 aylık tüm fatura, dekont, POS mutabakatı ve SLA raporlarını eksiksiz denetleyin.
+          </p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <button class="btn" style="background:#ffffff;color:var(--primary);border:none;padding:13px 28px;font-weight:800" onclick="openAuthModal('login')">
+              Giriş Yap
+            </button>
+            <a href="#nasil-calisir" class="btn" style="background:rgba(255,255,255,0.14);color:#ffffff;border:1px solid rgba(255,255,255,0.35);text-decoration:none;padding:13px 26px">
+              Nasıl Çalışır?
+            </a>
+          </div>
+        </div>
+
+        <!-- SLAYT 3: ÜYE OLDUKTAN SONRA BİLGİSAYARA İNDİRİLEBİLİR PAKET YAPISI -->
+        <div class="hero-slide" id="heroSlide2">
+          <span class="hero-badge">Taşınabilir Masaüstü Paketi · İnternetsiz ve Sunucusuz Çalışma</span>
+          <h1>Üyeliğinizi Oluşturun, Paketinizi Bilgisayarınıza İndirin ve Sadece O Bilgisayarda Offline Uygulayın</h1>
+          <p class="lead">
+            İhtiyacınıza uygun üyelik paketini seçerek kayıt olduktan veya giriş yaptıktan sonra, kurumunuza özel üretilen bağımsız sistem dosyasını bilgisayarınıza indirebilir; internet bağlantısına veya dış linke ihtiyaç duymadan kendi masaüstünüzde çalıştırabilirsiniz.
+          </p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <button class="btn" style="background:#ffffff;color:var(--primary);border:none;padding:13px 28px;font-weight:800" onclick="openAuthModal('register', 'full')">
+              Üyelik Oluştur
+            </button>
+            <a href="#paketler" class="btn" style="background:rgba(255,255,255,0.14);color:#ffffff;border:1px solid rgba(255,255,255,0.35);text-decoration:none;padding:13px 26px">
+              Paket Fiyatlarını Gör
+            </a>
+          </div>
+        </div>
+
+        <!-- SLIDER ALT KONTROL ÇUBUĞU -->
+        <div class="hero-slider-controls">
+          <div class="hero-dots">
+            <button class="hero-dot active" id="heroDot0" onclick="switchHeroSlide(0)" title="1. Bilgilendirme"></button>
+            <button class="hero-dot" id="heroDot1" onclick="switchHeroSlide(1)" title="2. Bilgilendirme"></button>
+            <button class="hero-dot" id="heroDot2" onclick="switchHeroSlide(2)" title="3. Bilgilendirme"></button>
+            <span id="heroSlideLabel" style="font-size:13.5px;color:#cbd5e1;margin-left:8px">1 / 3 — Kurumsal Dijital İkiz Mimarisinin Tanıtımı</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.25)" onclick="prevHeroSlide()">Önceki</button>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.25)" onclick="nextHeroSlide()">Sonraki</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÜYELİK PAKETLERİ (YETENEKLER VE YAKLAŞIK FİYATLAR SADECE PAKETLERİN İÇERİSİNDE YAZAR, İNDİRMEÜYE OLDUKTAN SONRA YAPILIR) -->
+    <section id="paketler" class="landing-section">
+      <div style="text-align:center;margin-bottom:36px">
+        <h2>Üyelik Paketleri, Yetenekler ve Yaklaşık Fiyatlandırma</h2>
+        <p style="color:var(--text-muted);max-width:860px;margin:0 auto">
+          Her üç üyelik paketi de platformdaki tüm temel yetenekleri barındırır; yalnızca müdürlük, uzman ajan ve geçmişe dönük evrak/fatura denetim ayı kapasiteleri farklıdır. <strong>Üye olduktan ve giriş yaptıktan sonra</strong> seçtiğiniz paketi bilgisayarınıza indirip doğrudan uygulayabilirsiniz.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- 1. PAKET: BAŞLANGIÇ PAKETİ -->
+        <div class="pricing-card">
+          <div>
+            <span class="agent-dept-tag">1. Üyelik Tipi · Küçük Ekipler ve Birimler</span>
+            <h2 style="margin-top:8px">Başlangıç Paketi</h2>
+            <p style="color:var(--text-muted);margin-bottom:8px">Birim bazlı dijital ikiz, sesli ajan iletişimi ve yıllık evrak kontrolü için başlangıç paketi.</p>
+
+            <div class="price-box">
+              <div style="font-size:12.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase">Yaklaşık Paket Fiyatı</div>
+              <div class="price-amount">₺4.900 <span class="price-period">/ ay (Yaklaşık)</span></div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px">Yıllık toplu alımda yaklaşık ₺49.000 / yıl</div>
+            </div>
+
+            <div style="font-weight:700;font-size:14.5px;color:var(--text);margin-bottom:8px">Paket İçerisindeki Yetenekler & Kapasite:</div>
+            <ul style="padding-left:18px;line-height:1.75;font-size:14.5px;margin:0">
+              <li><strong>Müdürlük / Birim Kapasitesi:</strong> 2 Müdürlük / Departman</li>
+              <li><strong>Yapay Zeka Ajan Kapasitesi:</strong> 3 Uzman Yapay Zeka Ajanı</li>
+              <li><strong>Evrak, Fatura & Dekont Denetimi:</strong> 12 Aylık (1 Yıl) Dönem Kontrolü</li>
+              <li><strong>Kullanıcı & Yetki Yönetimi (RBAC):</strong> 5 Kullanıcıya Kadar</li>
+              <li><strong>3D Kesitli Sanal Ofis Simülasyonu:</strong> 360° İnteraktif Bina & Toplantı Odası</li>
+              <li><strong>Sesli ve Yazılı Ajan İletişimi:</strong> Türkçe Konuşma (STT) ve Sesli Okuma (TTS)</li>
+              <li><strong>6 Kanallı Çok Modlu Ajan Eğitimi:</strong> Doküman, Görsel, Video, Ses ile Eğitim</li>
+              <li><strong>Yönetici Onay Kapısı & SHA-256 İz:</strong> Değiştirilemez Denetim Kaydı</li>
+              <li><strong>Bilgisayara İndirme:</strong> Üye girişi sonrası tek tıkla bilgisayara indirip offline çalıştırma</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border)">
+            <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="openAuthModal('register', 'starter')">
+              Başlangıç Paketi ile Üye Ol
+            </button>
+            <div style="font-size:12.5px;color:var(--text-muted);text-align:center;margin-top:8px">
+              Üye olduktan sonra paketinizi yönetim panelinden bilgisayarınıza indirebilirsiniz.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. PAKET: PROFESYONEL KURUM PAKETİ -->
+        <div class="pricing-card">
+          <div>
+            <span class="agent-dept-tag">2. Üyelik Tipi · Orta Ölçekli Kurumlar</span>
+            <h2 style="margin-top:8px">Profesyonel Kurum Paketi</h2>
+            <p style="color:var(--text-muted);margin-bottom:8px">Çok müdürlüklü kurumlar ve çok yıllı sözleşme/hak ediş denetimi yürüten yapılar için.</p>
+
+            <div class="price-box">
+              <div style="font-size:12.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase">Yaklaşık Paket Fiyatı</div>
+              <div class="price-amount">₺14.900 <span class="price-period">/ ay (Yaklaşık)</span></div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px">Yıllık toplu alımda yaklaşık ₺149.000 / yıl</div>
+            </div>
+
+            <div style="font-weight:700;font-size:14.5px;color:var(--text);margin-bottom:8px">Paket İçerisindeki Yetenekler & Kapasite:</div>
+            <ul style="padding-left:18px;line-height:1.75;font-size:14.5px;margin:0">
+              <li><strong>Müdürlük / Birim Kapasitesi:</strong> 5 Müdürlük / Departman</li>
+              <li><strong>Yapay Zeka Ajan Kapasitesi:</strong> 12 Uzman Yapay Zeka Ajanı</li>
+              <li><strong>Evrak, Fatura & Dekont Denetimi:</strong> 24 Aylık (2 Yıl) Dönem Kontrolü</li>
+              <li><strong>Kullanıcı & Yetki Yönetimi (RBAC):</strong> 25 Kullanıcıya Kadar</li>
+              <li><strong>3D Kesitli Sanal Ofis Simülasyonu:</strong> 360° İnteraktif Bina & Toplantı Odası</li>
+              <li><strong>Sesli ve Yazılı Ajan İletişimi:</strong> Türkçe Konuşma (STT) ve Sesli Okuma (TTS)</li>
+              <li><strong>6 Kanallı Çok Modlu Ajan Eğitimi:</strong> Doküman, Görsel, Video, Ses ile Eğitim</li>
+              <li><strong>Yönetici Onay Kapısı & SHA-256 İz:</strong> Kurumsal ERP/SQL Guard ve Kriptografik İz</li>
+              <li><strong>Bilgisayara İndirme:</strong> Üye girişi sonrası tek tıkla bilgisayara indirip offline çalıştırma</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border)">
+            <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="openAuthModal('register', 'pro')">
+              Profesyonel Paket ile Üye Ol
+            </button>
+            <div style="font-size:12.5px;color:var(--text-muted);text-align:center;margin-top:8px">
+              Üye olduktan sonra paketinizi yönetim panelinden bilgisayarınıza indirebilirsiniz.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. PAKET: FULL KURUMSAL & KAMU PAKETİ (ABB BİLGİ İŞLEM BAŞKENT KART) -->
+        <div class="pricing-card highlight">
+          <div>
+            <span class="agent-dept-tag" style="background:var(--primary);color:#fff">3. Üyelik Tipi · ABB Bilgi İşlem & Başkent Kart Full Paket</span>
+            <h2 style="margin-top:8px">Full Kurumsal & Kamu Paketi</h2>
+            <p style="color:var(--text-muted);margin-bottom:8px">
+              <strong>Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı (Başkent Kart Projesi)</strong>, bakanlıklar ve holdingler için tam kapasite paket.
+            </p>
+
+            <div class="price-box">
+              <div style="font-size:12.5px;font-weight:700;color:var(--primary);text-transform:uppercase">Yaklaşık Paket Fiyatı</div>
+              <div class="price-amount">₺34.900 <span class="price-period">/ ay (Yaklaşık)</span></div>
+              <div style="font-size:13px;color:var(--text-body);margin-top:2px">Yıllık kurumsal/kamu lisansında yaklaşık ₺349.000 / yıl</div>
+            </div>
+
+            <div style="font-weight:700;font-size:14.5px;color:var(--text);margin-bottom:8px">Paket İçerisindeki Yetenekler & Kapasite:</div>
+            <ul style="padding-left:18px;line-height:1.75;font-size:14.5px;margin:0">
+              <li><strong>Müdürlük / Şube Kapasitesi:</strong> Sınırsız (5+ Şube Müdürlüğü ve Alt Ekipler)</li>
+              <li><strong>Yapay Zeka Ajan Kapasitesi:</strong> Sınırsız Uzman Ajan & Proje Yönetimi Ekibi</li>
+              <li><strong>İhale Kapanış, Fatura & Dekont Denetimi:</strong> 36+ Ay (3 Yıl Tam Fatura, Banka Dekontu, Market/POS Takas, SLA & Teknik Şartname Kontrolü)</li>
+              <li><strong>Kullanıcı & Yetki Yönetimi (RBAC):</strong> Sınırsız Kullanıcı & Genel Admin Yönetimi</li>
+              <li><strong>3D Kesitli Sanal Ofis Simülasyonu:</strong> Tüm Müdürlükler İçin Tam 3D Kampüs</li>
+              <li><strong>Sesli ve Yazılı Ajan İletişimi:</strong> Tüm Ajanlarla Canlı Sesli/Yazılı Görüşme</li>
+              <li><strong>6 Kanallı Çok Modlu Ajan Eğitimi:</strong> Kurum İçi Özel Şartname ve Mevzuat Eğitimi</li>
+              <li><strong>Bilgisayara İndirme:</strong> Üye girişi sonrası tek tıkla bilgisayara indirip offline çalıştırma</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border)">
+            <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="openAuthModal('register', 'full')">
+              Full Paket ile Üye Ol
+            </button>
+            <div style="font-size:12.5px;color:var(--text-muted);text-align:center;margin-top:8px">
+              Üye olduktan sonra paketinizi yönetim panelinden bilgisayarınıza indirebilirsiniz.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NASIL ÇALIŞIR BÖLÜMÜ -->
+    <section id="nasil-calisir" class="landing-section">
+      <div style="text-align:center;margin-bottom:36px">
+        <h2>Nasıl Çalışır? 4 Adımda Kurumsal Dijital İkiz ve Offline Denetim</h2>
+        <p style="color:var(--text-muted);max-width:780px;margin:0 auto">
+          Sistemimiz hem kurumsal yerel ağınızda hem de üye olduktan sonra bilgisayarınıza indireceğiniz bağımsız uygulama dosyası üzerinden %100 offline olarak çalışır.
+        </p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px">1. ADIM</div>
+          <h3>Üyelik Paketinizi Seçin ve Giriş Yapın</h3>
+          <p>İhtiyacınıza uygun üyelik paketini (Başlangıç, Profesyonel veya Full Paket) seçerek kurumsal e-posta ve şifrenizle hesabınızı oluşturun veya mevcut hesabınıza giriş yapın.</p>
+        </div>
+        <div class="feature-card">
+          <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px">2. ADIM</div>
+          <h3>Paketinizi Bilgisayarınıza İndirin</h3>
+          <p>Üye girişi yaptıktan sonra yönetim panelinizdeki indirme butonuna tıklayarak kurumunuza özel üretilen offline paketi bilgisayarınıza indirin ve sadece o bilgisayarda çalıştırın.</p>
+        </div>
+        <div class="feature-card">
+          <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px">3. ADIM</div>
+          <h3>3D Sanal Ofis ve Ajanlarla Konuşun</h3>
+          <p>Müdürlüklerinizi 3D sanal ofiste izleyin; ilgili personel veya yönetici olarak her uzman ajanla mikrofonla sesli veya yazılı konuşarak görev ve analiz talep edin.</p>
+        </div>
+        <div class="feature-card">
+          <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px">4. ADIM</div>
+          <h3>3 Yıllık Fatura ve Dekontları Denetleyin</h3>
+          <p>Başkent Kart ihale kapanışı gibi süreçlerde bilgisayarınızdaki evrak klasörünü seçerek 36 aylık fatura, dekont, POS mutabakatı ve şartname eksiklerini otomatik tespit edin.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GENEL ADMİN TARAFINDAN YÖNETİLEN DİNAMİK SAYFALAR VE MEDYA BLOKLARI -->
+    <section id="cmsDynamicLandingSection" class="landing-section" style="display:none"></section>
+
+    <!-- İLETİŞİM & E-POSTA BİLGİLENDİRME BÜLTENİ (ALT TARAFTA ÜYELİK/GİRİŞ KUTUSU YOKTUR, E-POSTA BIRAKMA KISMI VARDIR) -->
+    <section id="iletisim" class="landing-section">
+      <div class="newsletter-box">
+        <div>
+          <h2>Güncel Kurumumuz Hakkında Bilgiler ve Bilgilendirmeler Edinmek İstiyorsanız E-posta Adresinizi Bırakın</h2>
+          <p>
+            Yeni yayınlanan offline denetim modülleri, kamu ihale/şartname kontrol şablonları, 3D sanal ofis güncellemeleri ve kurumsal duyurulardan haberdar olmak için e-posta adresinizi kaydedebilirsiniz.
+          </p>
+          <div id="newsletterSuccessMsg" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.35);border-radius:8px;color:#ffffff;font-weight:600"></div>
+        </div>
+        <form class="newsletter-form" onsubmit="event.preventDefault();submitNewsletterEmail();">
+          <input id="newsletterEmailInput" type="email" placeholder="Kurumsal e-posta adresinizi yazın..." required />
+          <button type="submit">Bilgilendirme Listesine Kaydol</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- DETAYLI SİTE HARİTASI (ALT FOOTER) -->
+    <footer class="sitemap-footer">
+      <div class="sitemap-inner">
+        <div class="sitemap-grid">
+          <!-- SÜTUN 1: KURUM BİLGİSİ & HAKKIMIZDA -->
+          <div class="sitemap-col">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <div class="brand-mark" style="width:38px;height:38px;font-size:18px">İ</div>
+              <strong style="color:#ffffff;font-size:17px">Kurumsal Dijital İkiz Platformu</strong>
+            </div>
+            <p style="font-size:14px;color:#94a3b8;line-height:1.65;margin-bottom:14px">
+              Kamu kurumları, belediyeler ve kurumsal işletmeler için %100 yerel (offline) çalışan, bilgisayara indirilebilir 3D sanal ofis, sesli ajan iletişimi ve ihale/evrak denetim platformu.
+            </p>
+            <div style="font-size:13.5px;color:#cbd5e1;line-height:1.7">
+              <div><strong>Merkez:</strong> Ankara Teknoloji Geliştirme Bölgesi / Türkiye</div>
+              <div><strong>E-posta:</strong> iletisim@dijital-ikiz.local</div>
+              <div><strong>Çalışma Modu:</strong> %100 Yerel & Sıfır-Güven (Zero-Trust)</div>
+            </div>
+          </div>
+
+          <!-- SÜTUN 2: KURUMSAL & HAKKIMIZDA HARİTASI -->
+          <div class="sitemap-col">
+            <h4>Kurumsal & Hakkımızda</h4>
+            <ul>
+              <li><a href="#hakkimizda" onclick="switchHeroSlide(0)">Hakkımızda ve Vizyonumuz</a></li>
+              <li><a href="#hakkimizda" onclick="switchHeroSlide(1)">Kamu & Belediye Çözümleri</a></li>
+              <li><a href="#hakkimizda" onclick="switchHeroSlide(2)">Offline Masaüstü Mimari</a></li>
+              <li><a href="#nasil-calisir">Sistem Nasıl Çalışır?</a></li>
+              <li><a href="#iletisim">KVKK ve Veri Güvenliği İlkeleri</a></li>
+              <li><a href="#iletisim">Sıfır-Güven (Zero-Trust) İzolasyon</a></li>
+            </ul>
+          </div>
+
+          <!-- SÜTUN 3: ÜYELİK PAKETLERİ & YETENEKLER -->
+          <div class="sitemap-col">
+            <h4>Üyelik Paketleri</h4>
+            <ul>
+              <li><a href="#paketler">Başlangıç Paketi (₺4.900 / ay)</a></li>
+              <li><a href="#paketler">Profesyonel Kurum Paketi (₺14.900 / ay)</a></li>
+              <li><a href="#paketler">Full Kurumsal & Kamu Paketi (₺34.900 / ay)</a></li>
+              <li><a href="#paketler">Paket Kapasite Karşılaştırması</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('register','full')">Yeni Kurum Üyeliği Oluştur</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Üye Girişi Sonrası Paket İndirme</a></li>
+            </ul>
+          </div>
+
+          <!-- SÜTUN 4: SİSTEM MODÜLLERİ & SANAL OFİS -->
+          <div class="sitemap-col">
+            <h4>Platform Modülleri</h4>
+            <ul>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">3D Kesitli Sanal Ofis Simülasyonu</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Sesli (STT/TTS) ve Yazılı Ajan İletişimi</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Ajanların Özel Görev & Kural Sayfaları</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">6 Kanallı Çok Modlu Ajan Eğitim Merkezi</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Kullanıcı ve Yetki Yönetimi (RBAC)</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Yönetici Onay Kapısı & SHA-256 Denetim İzi</a></li>
+            </ul>
+          </div>
+
+          <!-- SÜTUN 5: ABB BİLGİ İŞLEM & BAŞKENT KART DENETİMİ -->
+          <div class="sitemap-col">
+            <h4>Kamu & Başkent Kart Denetimi</h4>
+            <ul>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">ABB Bilgi İşlem Dairesi Başkanlığı</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Akıllı Şehirler Şube Müdürlüğü</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Proje Yönetimi Ekibi & Başkent Kart</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">3 Yıllık (36 Ay) Fatura & Dekont Kontrolü</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Market / POS Takas Mutabakat Cetveli</a></li>
+              <li><a href="javascript:void(0)" onclick="openAuthModal('login')">Teknik Şartname Kesin Kabul Denetimi</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sitemap-bottom">
+          <div>© 2026 Kurumsal Dijital İkiz Platformu v4.0 — Tüm Hakları Saklıdır. (%100 Yerel ve Offline Kurumsal Sistem)</div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <a href="#hakkimizda" style="color:#cbd5e1;text-decoration:none">Hakkımızda</a>
+            <a href="#paketler" style="color:#cbd5e1;text-decoration:none">Üyelik Paketleri</a>
+            <a href="#nasil-calisir" style="color:#cbd5e1;text-decoration:none">Nasıl Çalışır</a>
+            <a href="#iletisim" style="color:#cbd5e1;text-decoration:none">İletişim & E-posta Bülteni</a>
+            <a href="javascript:void(0)" onclick="openAuthModal('login')" style="color:#ffffff;font-weight:700;text-decoration:none">Giriş Yap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       1B. GİRİŞ YAP VE ÜYE OL POP-UP MODAL PENCERESİ (ÜST MENÜDEN VEYA PAKETLERDEN AÇILIR)
+       ======================================================================== -->
+  <div id="authModal" class="tour-overlay" style="display:none">
+    <div class="tour-modal" style="max-width:620px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap">
+        <div class="role-switcher">
+          <button id="tabBtnLogin" class="role-btn active" onclick="switchAuthModalTab('login')">Giriş Yap</button>
+          <button id="tabBtnRegister" class="role-btn" onclick="switchAuthModalTab('register')">Yeni Üyelik</button>
+          <button id="tabBtnReset" class="role-btn" onclick="switchAuthModalTab('reset')">Şifre Sıfırla</button>
+          <button id="tabBtnRestore" class="role-btn" onclick="switchAuthModalTab('restore')">Satın Alımı Yükle</button>
+        </div>
+        <button class="btn btn-sm" onclick="closeAuthModal()">Kapat ✕</button>
+      </div>
+
+      <!-- SEKME 1: SADECE E-POSTA VE ŞİFRE İLE GİRİŞ YAP -->
+      <div id="authModalLoginPane">
+        <h2 style="margin-top:0">Kurumsal Hesabınıza Giriş Yapın</h2>
+        <p style="color:var(--text-muted);font-size:15px">
+          Giriş yaptıktan sonra seçili üyelik paketinizi bilgisayarınıza indirebilir ve tüm işlemleri %100 offline uygulayabilirsiniz.
+        </p>
+
+        <div style="display:none">
+          <select id="loginTenantSelect"></select>
+        </div>
+        <div style="margin-bottom:14px">
+          <label class="field-label">E-posta Adresi</label>
+          <input id="loginEmail" type="email" placeholder="ornek: baskentkart@ankara.bel.tr" value="" onkeydown="if(event.key==='Enter')submitLoginForm()" />
+        </div>
+        <div style="margin-bottom:14px">
+          <label class="field-label">Şifre</label>
+          <input id="loginPass" type="password" placeholder="••••••••" value="" style="width:100%;padding:11px 14px;border:1px solid var(--border-strong);border-radius:8px;font-size:15.5px" onkeydown="if(event.key==='Enter')submitLoginForm()" />
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:13.5px">
+          <a href="javascript:void(0)" onclick="switchAuthModalTab('reset')" style="color:var(--primary);font-weight:600;text-decoration:none">Şifremi Unuttum / Sıfırla</a>
+          <a href="javascript:void(0)" onclick="openPrivacyModal()" style="color:var(--text-muted);text-decoration:underline">Gizlilik Politikası ve KVKK</a>
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center;font-size:16px" onclick="submitLoginForm()">
+          Giriş Yap
+        </button>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 12px" />
+        <div style="font-size:13px;color:var(--text-body);background:var(--surface-soft);padding:13px;border-radius:10px;border:1px solid var(--border)">
+          <div style="font-weight:800;margin-bottom:6px;color:var(--text)">Kayıtlı Kurum Hesap Bilgileri (E-posta ve Şifreyi Yazarak Giriniz):</div>
+          <div style="display:flex;flex-direction:column;gap:5px;line-height:1.45">
+            <div>• <strong>ABB Bilgi İşlem — Başkent Kart (Full Paket):</strong> <code>baskentkart@ankara.bel.tr</code> | Şifre: <code>Ankara2026!</code></div>
+            <div>• <strong>ABC Holding A.Ş. (Profesyonel Paket):</strong> <code>admin@abc.sistem.com</code> | Şifre: <code>Abc2026!</code></div>
+            <div>• <strong>Demo Şirketi A.Ş. (Başlangıç Paketi):</strong> <code>demo@demo.sistem.com</code> | Şifre: <code>Demo2026!</code></div>
+            <div>• <strong>Genel Admin (Üst Yönetim):</strong> <code>superadmin@dijital-ikiz.local</code> | Şifre: <code>Admin2026!</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEKME 2: YENİ KURUM ÜYELİĞİ OLUŞTUR (E-POSTA DOĞRULAMA + GİZLİLİK POLİTİKASI ONAYLI) -->
+      <div id="authModalRegisterPane" style="display:none">
+        <h2 style="margin-top:0">Yeni Kurum Üyeliği Oluştur</h2>
+        <p style="color:var(--text-muted);font-size:15px">
+          Üyelik paketinizi seçip e-posta doğrulamasıyla hesabınızı oluşturduktan hemen sonra paketinizi bilgisayarınıza indirip offline çalıştırabilirsiniz.
+        </p>
+
+        <div style="margin-bottom:14px">
+          <label class="field-label">Üyelik Paketi Seçin</label>
+          <select id="regPlanTier">
+            <option value="full">Full Kurumsal & Kamu Paketi — Yaklaşık ₺34.900 / ay (Sınırsız Müdürlük/Ajan · 36 Ay Denetim)</option>
+            <option value="pro">Profesyonel Kurum Paketi — Yaklaşık ₺14.900 / ay (5 Müdürlük · 12 Ajan · 24 Ay Denetim)</option>
+            <option value="starter">Başlangıç Paketi — Yaklaşık ₺4.900 / ay (2 Müdürlük · 3 Ajan · 12 Ay Denetim)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label class="field-label">Kurum / Daire Başkanlığı / Firma Adı</label>
+            <input id="regCompany" type="text" placeholder="Örn: Ankara Büyükşehir Belediyesi Bilgi İşlem" />
+          </div>
+          <div>
+            <label class="field-label">Adınız Soyadınız (Kurum Admini)</label>
+            <input id="regName" type="text" placeholder="Örn: Emre Demir" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label class="field-label">Kurumsal E-posta Adresiniz</label>
+            <div style="display:flex;gap:6px">
+              <input id="regEmail" type="email" placeholder="Örn: ad.soyad@kurum.gov.tr" />
+              <button type="button" class="btn btn-sm" style="white-space:nowrap" onclick="sendVerificationCode('regEmail','regOtpCode','regOtpHint')">Kod Gönder</button>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">E-posta Doğrulama Kodu</label>
+            <input id="regOtpCode" type="text" placeholder="6 haneli doğrulama kodu" />
+          </div>
+        </div>
+        <div id="regOtpHint" style="display:none;margin-bottom:12px;padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:13px;color:var(--primary);font-weight:600"></div>
+
+        <div class="form-row">
+          <div>
+            <label class="field-label">Giriş Şifreniz (En az 6 karakter)</label>
+            <input id="regPass" type="password" placeholder="••••••" style="width:100%;padding:11px 14px;border:1px solid var(--border-strong);border-radius:8px;font-size:15.5px" />
+          </div>
+          <div>
+            <label class="field-label">Öncelikli 1. Uzman Ajan</label>
+            <select id="regAgent1">
+              <option value="01-Proje-Yonetimi/bas-proje-yoneticisi">Proje Yönetimi — Baş Proje Yöneticisi (PMO & Kabul)</option>
+              <option value="09-Satis-ve-CRM/satis-temsilcisi">Satış ve Müşteri İlişkileri — Satış Temsilcisi</option>
+              <option value="08-Dijital-Pazarlama/performans-pazarlama-uzmani">Dijital Pazarlama — Performans Pazarlama Uzmanı</option>
+              <option value="04-Yazilim-ve-Mimari/bas-sistem-mimari">Yazılım & Mimari — Baş Sistem Mimarı</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label class="field-label">Öncelikli 2. Uzman Ajan</label>
+          <select id="regAgent2">
+            <option value="10-Finans-ve-Operasyon/finansal-analist">Finans & Operasyon — Finansal Analist & Fatura/Dekont Denetçisi</option>
+            <option value="10-Finans-ve-Operasyon/hukuk-uyum-danismani">Finans & Hukuk — Hukuk, Şartname & KVKK Danışmanı</option>
+            <option value="05-Test-QA-ve-Guvenlik/siber-guvenlik-uzmani">Siber Güvenlik — Siber Güvenlik & Denetim Uzmanı</option>
+            <option value="02-Strateji-ve-Arastirma/pazar-istihbarat-analisti">Strateji — Pazar İstihbarat Analisti</option>
+          </select>
+        </div>
+
+        <label class="checkbox-item" style="margin-bottom:14px;cursor:pointer">
+          <input id="regPrivacyCheck" type="checkbox" checked />
+          <span><a href="javascript:void(0)" onclick="openPrivacyModal()" style="color:var(--primary);font-weight:700">Gizlilik Politikası ve KVKK Aydınlatma Metni</a>'ni okudum, onaylıyorum.</span>
+        </label>
+
+        <button id="btnRegisterDemo" class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="registerDemoAccount()">
+          Üyeliği Oluştur ve Paketi İndirme Paneline Geç
+        </button>
+      </div>
+
+      <!-- SEKME 3: ŞİFRE SIFIRLAMA (20 ÖNCELİK MADDE 7) -->
+      <div id="authModalResetPane" style="display:none">
+        <h2 style="margin-top:0">Şifre Sıfırlama</h2>
+        <p style="color:var(--text-muted);font-size:15px">Kayıtlı e-posta adresinize yerel doğrulama kodu göndererek yeni şifre belirleyebilirsiniz.</p>
+        <div style="margin-bottom:12px">
+          <label class="field-label">Kayıtlı E-posta Adresiniz</label>
+          <div style="display:flex;gap:8px">
+            <input id="resetEmail" type="email" placeholder="ornek: admin@abc.sistem.com" />
+            <button type="button" class="btn btn-sm" style="white-space:nowrap" onclick="sendVerificationCode('resetEmail','resetOtpCode','resetOtpHint')">Kod Gönder</button>
+          </div>
+        </div>
+        <div id="resetOtpHint" style="display:none;margin-bottom:12px;padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:13px;color:var(--primary);font-weight:600"></div>
+        <div class="form-row">
+          <div>
+            <label class="field-label">Doğrulama Kodu</label>
+            <input id="resetOtpCode" type="text" placeholder="6 haneli kod" />
+          </div>
+          <div>
+            <label class="field-label">Yeni Şifreniz (En az 6 karakter)</label>
+            <input id="resetNewPass" type="password" placeholder="••••••" style="width:100%;padding:11px 14px;border:1px solid var(--border-strong);border-radius:8px;font-size:15.5px" />
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="submitPasswordReset()">
+          Şifremi Güncelle
+        </button>
+      </div>
+
+      <!-- SEKME 4: SATIN ALIMLARI GERİ YÜKLEME (20 ÖNCELİK MADDE 12) -->
+      <div id="authModalRestorePane" style="display:none">
+        <h2 style="margin-top:0">Önceki Satın Alımları ve Lisansı Geri Yükle</h2>
+        <p style="color:var(--text-muted);font-size:15px">Daha önce satın aldığınız Başlangıç, Profesyonel veya Full Kurumsal paket lisansınızı e-posta adresinizle geri yükleyin.</p>
+        <div style="margin-bottom:14px">
+          <label class="field-label">Kurumsal E-posta veya Lisans Anahtarı</label>
+          <input id="restoreQueryInput" type="text" placeholder="Örn: baskentkart@ankara.bel.tr veya LIC-ABB-2026" />
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:13px;justify-content:center" onclick="submitRestorePurchase()">
+          Satın Alımımı ve Paket Haklarımı Geri Yükle
+        </button>
+        <div id="restoreResultBox" style="display:none;margin-top:14px;padding:14px;background:#dcfce7;border:1px solid #86efac;border-radius:10px;color:#166534;font-size:14.5px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       2. UYGULAMA ANA GÖRÜNÜMÜ (ÜYE OLDUKTAN / GİRİŞ YAPILDIKTAN SONRA)
+       ======================================================================== -->
+  <div id="appView" style="display:none">
+    <header class="site-header">
+      <div class="brand-area">
+        <div class="brand-mark">İ</div>
+        <div>
+          <h1 class="brand-title" id="headerTitle">Kurumsal Dijital İkiz Platformu</h1>
+          <div class="brand-subtitle" id="headerSubtitle">Yüzde Yüz Yerel, Güvenli Yapay Zeka Sanal Ofis ve Yönetim Sistemi</div>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- ÜYELİK PAKETİ ROZETİ -->
+        <span id="demoPlanBadge" class="status-badge warn" style="display:none"></span>
+
+        <!-- 3 KATMANLI ROL / PANEL GEÇİŞİ (SADECE GENEL ADMİN) -->
+        <div id="headerRoleSwitcher" class="role-switcher" style="display:none" title="Görüntülemek istediğiniz yönetim veya kullanıcı katmanını seçin">
+          <button class="role-btn" data-role="citizen" onclick="switchRole('citizen')">🌐 Vatandaş Portalı</button>
+          <button class="role-btn active" data-role="tenant_admin" onclick="switchRole('tenant_admin')">🏢 Kurum Admini</button>
+          <button class="role-btn" data-role="super_admin" onclick="switchRole('super_admin')">👑 Genel Admin</button>
+        </div>
+
+        <!-- AKTİF KURUM SEÇİCİ (SADECE GENEL ADMİN) -->
+        <div id="headerTenantBox" class="tenant-selector-box" style="display:none">
+          <label for="tenantSelect">Kurum:</label>
+          <select id="tenantSelect" onchange="onTenantChange(this.value)"></select>
+        </div>
+
+        <span id="llmStatusBadge" class="status-badge ok">🧠 Yerel Beyin Hazır</span>
+        <span id="connStatusBadge" class="status-badge ok" title="Ağ / Offline Çalışma Durumu">🔌 Yerel Offline Hazır</span>
+
+        <button class="btn btn-sm" id="notifBellBtn" onclick="toggleNotifDrawer()" title="Bildirim Merkezi">
+          🔔 Bildirimler <span id="notifBadgeCount" class="nav-count">2</span>
+        </button>
+
+        <button class="btn btn-primary btn-sm" onclick="downloadCurrentTenantOfflineApp()" title="Üye olduğunuz paketi bilgisayarınıza indirip sunucusuz ve linksiz çalıştırın">
+          💻 Üyelik Paketini Bilgisayara İndir (.html)
+        </button>
+
+        <button class="btn btn-sm" onclick="startOnboardingTour()" title="Adım Adım Kullanım Rehberini Aç">
+          🧭 Öğretici Rehber
+        </button>
+        <button class="btn btn-sm" onclick="logoutToLanding()" title="Tanıtım ve Giriş Sayfasına Dön">
+          🚪 Çıkış
+        </button>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebarNav"></aside>
+      <main class="content-area" id="pageContent">
+        <div class="card">Yükleniyor...</div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       3. İLK DEFA GİRENLER İÇİN ADIM ADIM POP-UP ÖĞRETİCİ (ONBOARDING MODAL)
+       ======================================================================== -->
+  <div id="onboardingModal" class="tour-overlay" style="display:none">
+    <div class="tour-modal">
+      <div class="tour-step-dots" id="tourDots"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="agent-dept-tag" id="tourStepTag">Adım 1 / 6</span>
+        <button class="btn btn-sm" onclick="closeOnboardingTour()">Kapat ✕</button>
+      </div>
+      <h2 id="tourTitle" style="margin-top:4px">Hoş Geldiniz!</h2>
+      <p id="tourBody" style="font-size:16px;color:var(--text-body)"></p>
+      <div class="tour-highlight-box" id="tourTip"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)">
+        <button class="btn" id="btnTourPrev" onclick="prevTourStep()">← Önceki Adım</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn" onclick="closeOnboardingTour()">Rehberi Atla</button>
+          <button class="btn btn-primary" id="btnTourNext" onclick="nextTourStep()">Sonraki Adım →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BİLDİRİM ÇEKMECESİ VE GİZLİLİK POLİTİKASI MODALI -->
+  <div id="notifDropdown" class="notif-dropdown"></div>
+
+  <div id="privacyModal" class="tour-overlay" style="display:none">
+    <div class="tour-modal" style="max-width:720px;max-height:85vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+        <h2 style="margin:0">Gizlilik Politikası ve KVKK Aydınlatma Metni</h2>
+        <button class="btn btn-sm" onclick="document.getElementById('privacyModal').style.display='none'">Kapat ✕</button>
+      </div>
+      <div id="privacyModalBody" class="report-paper" style="max-height:55vh;overflow-y:auto"></div>
+      <div style="margin-top:16px;text-align:right">
+        <button class="btn btn-primary" onclick="document.getElementById('privacyModal').style.display='none'">Okudum, Anladım</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/office3d.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

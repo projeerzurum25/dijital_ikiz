@@ -1,0 +1,12 @@
+{
+  "name": "dijital-ikiz-platformu",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Multi-Tenant, %100 Offline, Skills & Rules Tabanlı Kurumsal Dijital İkiz Platformu (v4.0)",
+  "scripts": {
+    "start": "node --no-warnings engine/src/server.mjs",
+    "provision": "node --no-warnings engine/src/provisioner.mjs",
+    "doctor": "node --no-warnings engine/src/doctor.mjs"
+  }
+}
