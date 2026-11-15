@@ -24,7 +24,7 @@ installNetGuard({ allowCloud: false });
 ensureCore();
 
 const PORT = Number(process.env.PORT || 4400);
-const HOST = '127.0.0.1';
+const HOST = process.env.HOST || '::';
 const PUBLIC_DIR = join(ENGINE, 'public');
 
 // Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı (FULL PAKET • 5 Şube Müdürlüğü & Başkent Kart 3 Yıllık İhale Kabul) kurumunu oluştur
@@ -443,21 +443,18 @@ const server = createServer(async (req, res) => {
           break;
         }
         // Kurum ajanının kendi e-postası (<slug>@ankara.bel.tr veya <slug>@<subdomain>) ile giriş desteği
-        const depts = readDepartments(t);
-        for (const dept of depts) {
-          const foundP = (dept.personnel || []).find(p => {
-            const pEmail1 = `${p.slug}@${t}.local`.toLowerCase();
-            const pEmail2 = t === 'abb-bilgi-islem' ? `${p.slug}@ankara.bel.tr`.toLowerCase() : `${p.slug}@${(cfgT.subdomain || t).split('.')[0]}.com`.toLowerCase();
-            const pEmail3 = (p.email || '').toLowerCase();
-            return email === pEmail1 || email === pEmail2 || (pEmail3 && email === pEmail3);
-          });
-          if (foundP) {
-            matchedTenant = t;
-            matchedAgent = { dept: dept.slug, slug: foundP.slug, title: foundP.title };
-            break;
-          }
+        const pers = listPersonnel(t);
+        const foundP = pers.find(p => {
+          const pEmail1 = `${p.slug}@${t}.local`.toLowerCase();
+          const pEmail2 = t === 'abb-bilgi-islem' ? `${p.slug}@ankara.bel.tr`.toLowerCase() : `${p.slug}@${(cfgT.subdomain || t).split('.')[0]}.com`.toLowerCase();
+          const pEmail3 = (p.email || '').toLowerCase();
+          return email === pEmail1 || email === pEmail2 || (pEmail3 && email === pEmail3);
+        });
+        if (foundP) {
+          matchedTenant = t;
+          matchedAgent = { dept: foundP.dept, slug: foundP.slug, title: foundP.title };
+          break;
         }
-        if (matchedTenant) break;
       }
 
       if (!matchedTenant) {
@@ -477,10 +474,10 @@ const server = createServer(async (req, res) => {
       let assignedDept = matchedAgent?.dept || matchedUserRow?.departman || null;
       let assignedSlug = matchedAgent?.slug || matchedUserRow?.agent_slug || null;
       if (isAgentRole && (!assignedDept || !assignedSlug)) {
-        const firstDept = readDepartments(matchedTenant)[0];
-        if (firstDept) {
-          assignedDept = assignedDept || firstDept.slug;
-          assignedSlug = assignedSlug || firstDept.personnel?.[0]?.slug || null;
+        const firstPers = listPersonnel(matchedTenant)[0];
+        if (firstPers) {
+          assignedDept = assignedDept || firstPers.dept;
+          assignedSlug = assignedSlug || firstPers.slug || null;
         }
       }
       const resolvedRole = matchedUserRow?.rol?.includes('Vatandaş')

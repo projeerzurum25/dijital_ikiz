@@ -227,6 +227,8 @@ window.navigate = async function(page, extra = {}) {
     agentDetail = await api(`/api/agent?dept=${encodeURIComponent(extra.dept)}&slug=${encodeURIComponent(extra.slug)}`);
   }
   renderSidebar();
+  if (typeof renderMobileBottomNav === 'function') renderMobileBottomNav();
+  if (typeof closeAppSidebar === 'function') closeAppSidebar();
   renderPage();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -4056,4 +4058,208 @@ window.approveMucitLabMedia = async function(workshopId) {
   showToast('MucitLab görsel/video/dosya kontrolü onaylandı.', 'ok');
   renderProjeStilleriPage(document.getElementById('pageContent'));
 };
+
+// ============================================================================
+// MOBİL UYUMLU & ÖZELLEŞTİRİLEBİLİR MENÜ / EKRAN SİSTEMİ
+// ============================================================================
+const UI_PREFS_KEY = 'dijital_ikiz_ui_prefs_v1';
+const DEFAULT_UI_PREFS = { menuMode: 'auto', density: 'auto', scale: 'auto' };
+
+function loadUiPrefs() {
+  try {
+    const raw = localStorage.getItem(UI_PREFS_KEY);
+    if (!raw) return { ...DEFAULT_UI_PREFS };
+    return { ...DEFAULT_UI_PREFS, ...JSON.parse(raw) };
+  } catch {
+    return { ...DEFAULT_UI_PREFS };
+  }
+}
+
+function saveUiPrefs(prefs) {
+  try { localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs)); } catch { }
+}
+
+function detectDeviceType() {
+  const w = window.innerWidth || document.documentElement.clientWidth || 1280;
+  if (w <= 640) return 'mobile';
+  if (w <= 1024) return 'tablet';
+  return 'desktop';
+}
+
+function applyAdaptiveLayout() {
+  const prefs = loadUiPrefs();
+  const device = detectDeviceType();
+  const w = window.innerWidth || 1280;
+  const h = window.innerHeight || 720;
+
+  let effectiveMenu = prefs.menuMode;
+  if (effectiveMenu === 'auto') {
+    effectiveMenu = device === 'desktop' ? 'normal' : 'hamburger';
+  }
+
+  const showBottomNav = prefs.menuMode === 'bottom' || (prefs.menuMode === 'auto' && device === 'mobile');
+  const effectiveDensity = prefs.density === 'auto'
+    ? (device === 'mobile' ? 'compact' : 'comfortable')
+    : prefs.density;
+  const effectiveScale = prefs.scale === 'auto'
+    ? (device === 'mobile' ? 'large' : 'normal')
+    : prefs.scale;
+
+  document.body.dataset.device = device;
+  document.body.dataset.menuMode = prefs.menuMode;
+  document.body.dataset.effectiveMenu = effectiveMenu;
+  document.body.dataset.showBottomNav = showBottomNav ? 'true' : 'false';
+  document.body.dataset.effectiveDensity = effectiveDensity;
+  document.body.dataset.effectiveScale = effectiveScale;
+
+  if (effectiveMenu === 'normal') {
+    closeAppSidebar();
+    closeLandingMenu();
+  }
+
+  const infoEl = document.getElementById('detectedDeviceInfo');
+  if (infoEl) {
+    const devLabel = device === 'mobile' ? 'Cep Telefonu' : device === 'tablet' ? 'Tablet' : 'Masaüstü';
+    const menuLabel = effectiveMenu === 'hamburger' ? 'Hamburger Menü' : effectiveMenu === 'bottom' ? 'Mobil Alt Menü' : 'Normal Menü';
+    infoEl.textContent = `Algılanan Ekran: ${devLabel} (${w}×${h}px) · Aktif Menü: ${menuLabel}`;
+  }
+
+  syncLayoutModalButtons(prefs);
+  renderMobileBottomNav();
+}
+
+function syncLayoutModalButtons(prefs) {
+  document.querySelectorAll('[data-menu-opt]').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-menu-opt') === prefs.menuMode);
+  });
+  document.querySelectorAll('[data-density-opt]').forEach(btn => {
+    btn.classList.toggle('active-opt', btn.getAttribute('data-density-opt') === prefs.density);
+  });
+  document.querySelectorAll('[data-scale-opt]').forEach(btn => {
+    btn.classList.toggle('active-opt', btn.getAttribute('data-scale-opt') === prefs.scale);
+  });
+}
+
+function renderMobileBottomNav() {
+  const nav = document.getElementById('mobileBottomNav');
+  if (!nav || typeof currentRole === 'undefined') return;
+
+  let items = [];
+  if (currentRole === 'super_admin') {
+    items = [
+      { page: 'sa_tenants', icon: '🏛️', label: 'Kurumlar' },
+      { page: 'sa_agents', icon: '🤖', label: 'Ajanlar' },
+      { page: 'sa_cms', icon: '🎨', label: 'CMS' },
+      { page: 'sa_health', icon: '🩺', label: 'Sağlık' },
+    ];
+  } else if (currentRole === 'citizen') {
+    items = [
+      { page: 'citizen_home', icon: '🏠', label: 'Başvuru' },
+      { page: 'agents', icon: '👥', label: 'Ajanlar' },
+      { page: 'virtual_office', icon: '🏙️', label: '3D Ofis' },
+    ];
+  } else if (currentRole === 'agent_user') {
+    items = [
+      { page: 'projects_hub', icon: '📂', label: 'Kaynaklar' },
+      { page: 'proje_stilleri', icon: '🎯', label: 'Projeler' },
+    ];
+  } else {
+    items = [
+      { page: 'overview', icon: '📊', label: 'Özet' },
+      { page: 'projects_hub', icon: '📂', label: 'Projeler' },
+      { page: 'agents', icon: '🤖', label: 'Ajanlar' },
+      { page: 'approvals', icon: '🛡️', label: 'Onaylar' },
+    ];
+  }
+
+  nav.innerHTML = items.map(it => `
+    <button type="button" class="mobile-bottom-btn ${currentPage === it.page ? 'active' : ''}" onclick="navigate('${it.page}')">
+      <span class="mb-icon">${it.icon}</span>
+      <span class="mb-label">${it.label}</span>
+    </button>
+  `).join('') + `
+    <button type="button" class="mobile-bottom-btn" onclick="toggleAppSidebar()">
+      <span class="mb-icon">☰</span>
+      <span class="mb-label">Menü</span>
+    </button>
+  `;
+}
+
+window.toggleLandingMenu = function() {
+  const links = document.getElementById('landingLinks');
+  const btn = document.getElementById('landingMenuToggle');
+  if (!links) return;
+  const open = links.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+};
+
+window.closeLandingMenu = function() {
+  const links = document.getElementById('landingLinks');
+  const btn = document.getElementById('landingMenuToggle');
+  if (links) links.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+};
+
+window.toggleAppSidebar = function(forceOpen) {
+  const sidebar = document.getElementById('sidebarNav');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const btn = document.getElementById('appMenuToggle');
+  if (!sidebar) return;
+  const willOpen = typeof forceOpen === 'boolean' ? forceOpen : !sidebar.classList.contains('drawer-open');
+  sidebar.classList.toggle('drawer-open', willOpen);
+  if (backdrop) backdrop.classList.toggle('open', willOpen);
+  if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+};
+
+window.closeAppSidebar = function() {
+  const sidebar = document.getElementById('sidebarNav');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const btn = document.getElementById('appMenuToggle');
+  if (sidebar) sidebar.classList.remove('drawer-open');
+  if (backdrop) backdrop.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+};
+
+window.openLayoutSettings = function() {
+  const modal = document.getElementById('layoutSettingsModal');
+  if (!modal) return;
+  applyAdaptiveLayout();
+  modal.style.display = 'flex';
+};
+
+window.closeLayoutSettings = function() {
+  const modal = document.getElementById('layoutSettingsModal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.setUiPref = function(key, value) {
+  const prefs = loadUiPrefs();
+  prefs[key] = value;
+  saveUiPrefs(prefs);
+  applyAdaptiveLayout();
+  if (typeof showToast === 'function') {
+    showToast('Menü ve ekran tasarımı güncellendi.', 'ok');
+  }
+};
+
+window.resetUiPrefs = function() {
+  saveUiPrefs({ ...DEFAULT_UI_PREFS });
+  applyAdaptiveLayout();
+  if (typeof showToast === 'function') {
+    showToast('Otomatik ekran uyumu varsayılanlarına dönüldü.', 'ok');
+  }
+};
+
+let _resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(applyAdaptiveLayout, 80);
+});
+window.addEventListener('orientationchange', applyAdaptiveLayout);
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyAdaptiveLayout);
+} else {
+  applyAdaptiveLayout();
+}
 

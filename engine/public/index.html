@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Kurumsal Dijital İkiz Platformu v4.0 — %100 Yerel 3D Sanal Ofis ve Yapay Zeka Yönetim Sistemi</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -24,12 +26,21 @@
         </div>
       </div>
 
-      <div class="landing-links">
-        <a href="#hakkimizda">Hakkımızda</a>
-        <a href="#paketler">Üyelik Paketleri</a>
-        <a href="#nasil-calisir">Nasıl Çalışır</a>
-        <a href="#iletisim">İletişim</a>
-        <button class="btn-login-nav" onclick="openAuthModal('login')">Giriş Yap</button>
+      <div class="landing-nav-actions">
+        <button type="button" class="btn btn-sm ui-settings-trigger" onclick="openLayoutSettings()" title="Menü ve Ekran Tasarımını Ayarla">
+          📱 Menü &amp; Görünüm
+        </button>
+        <button type="button" id="landingMenuToggle" class="hamburger-btn" onclick="toggleLandingMenu()" aria-label="Menüyü Aç/Kapat" aria-expanded="false">
+          ☰
+        </button>
+      </div>
+
+      <div class="landing-links" id="landingLinks">
+        <a href="#hakkimizda" onclick="closeLandingMenu()">Hakkımızda</a>
+        <a href="#paketler" onclick="closeLandingMenu()">Üyelik Paketleri</a>
+        <a href="#nasil-calisir" onclick="closeLandingMenu()">Nasıl Çalışır</a>
+        <a href="#iletisim" onclick="closeLandingMenu()">İletişim</a>
+        <button class="btn-login-nav" onclick="closeLandingMenu(); openAuthModal('login')">Giriş Yap</button>
       </div>
     </nav>
 
@@ -546,8 +557,11 @@
   <div id="appView" style="display:none">
     <header class="site-header">
       <div class="brand-area">
+        <button type="button" id="appMenuToggle" class="hamburger-btn" onclick="toggleAppSidebar()" aria-label="Menüyü Aç/Kapat" aria-expanded="false">
+          ☰
+        </button>
         <div class="brand-mark">İ</div>
-        <div>
+        <div class="brand-text-wrap">
           <h1 class="brand-title" id="headerTitle">Kurumsal Dijital İkiz Platformu</h1>
           <div class="brand-subtitle" id="headerSubtitle">Yüzde Yüz Yerel, Güvenli Yapay Zeka Sanal Ofis ve Yönetim Sistemi</div>
         </div>
@@ -577,7 +591,11 @@
           🔔 Bildirimler <span id="notifBadgeCount" class="nav-count">2</span>
         </button>
 
-        <button class="btn btn-primary btn-sm" onclick="downloadCurrentTenantOfflineApp()" title="Üye olduğunuz paketi bilgisayarınıza indirip sunucusuz ve linksiz çalıştırın">
+        <button class="btn btn-sm ui-settings-trigger" onclick="openLayoutSettings()" title="Menü Yapısını ve Ekran Tasarımını Ayarla">
+          📱 Menü &amp; Tasarım
+        </button>
+
+        <button class="btn btn-primary btn-sm header-download-btn" onclick="downloadCurrentTenantOfflineApp()" title="Üye olduğunuz paketi bilgisayarınıza indirip sunucusuz ve linksiz çalıştırın">
           💻 Üyelik Paketini Bilgisayara İndir (.html)
         </button>
 
@@ -590,11 +608,73 @@
       </div>
     </header>
 
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeAppSidebar()"></div>
+
     <div class="app-shell">
       <aside class="sidebar" id="sidebarNav"></aside>
       <main class="content-area" id="pageContent">
         <div class="card">Yükleniyor...</div>
       </main>
+    </div>
+
+    <nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Mobil Alt Menü"></nav>
+  </div>
+
+  <!-- MOBİL / EKRAN & MENÜ TASARIM AYARLARI MODALI -->
+  <div id="layoutSettingsModal" class="tour-overlay" style="display:none" onclick="if(event.target===this) closeLayoutSettings()">
+    <div class="tour-modal layout-settings-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+        <div>
+          <h2 style="margin:0;font-size:20px">📱 Menü Yapısı &amp; Ekran Tasarımı</h2>
+          <div id="detectedDeviceInfo" style="font-size:13px;color:var(--text-muted);margin-top:4px">Algılanan Ekran: Otomatik</div>
+        </div>
+        <button type="button" class="btn btn-sm" onclick="closeLayoutSettings()">Kapat ✕</button>
+      </div>
+
+      <div class="layout-settings-group">
+        <div class="layout-settings-label">1. Menü Yapısı (Hamburger / Normal / Mobil Alt Menü)</div>
+        <div class="layout-option-grid" id="menuModeOptions">
+          <button type="button" class="layout-option-btn" data-menu-opt="auto" onclick="setUiPref('menuMode','auto')">
+            <strong>🤖 Otomatik (Önerilen)</strong>
+            <span>Masaüstünde normal menü, tablet/telefonda otomatik hamburger + alt menü</span>
+          </button>
+          <button type="button" class="layout-option-btn" data-menu-opt="hamburger" onclick="setUiPref('menuMode','hamburger')">
+            <strong>☰ Hamburger Menü</strong>
+            <span>Tüm ekran boyutlarında açılır/kapanır çekmece menü kullan</span>
+          </button>
+          <button type="button" class="layout-option-btn" data-menu-opt="normal" onclick="setUiPref('menuMode','normal')">
+            <strong>📋 Normal Menü</strong>
+            <span>Klasik sabit yan/üst menü görünümünü koru</span>
+          </button>
+          <button type="button" class="layout-option-btn" data-menu-opt="bottom" onclick="setUiPref('menuMode','bottom')">
+            <strong>📱 Mobil Uygulama Alt Menü</strong>
+            <span>Altta sabit mobil sekme çubuğu + gerekirse çekmece menü</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="layout-settings-group">
+        <div class="layout-settings-label">2. Tasarım &amp; Alan Yoğunluğu</div>
+        <div class="layout-pill-row" id="densityOptions">
+          <button type="button" class="btn btn-sm" data-density-opt="auto" onclick="setUiPref('density','auto')">🤖 Otomatik</button>
+          <button type="button" class="btn btn-sm" data-density-opt="compact" onclick="setUiPref('density','compact')">📱 Kompakt (Mobil)</button>
+          <button type="button" class="btn btn-sm" data-density-opt="comfortable" onclick="setUiPref('density','comfortable')">🖥️ Geniş (Masaüstü)</button>
+        </div>
+      </div>
+
+      <div class="layout-settings-group">
+        <div class="layout-settings-label">3. Yazı &amp; Dokunma Boyutu</div>
+        <div class="layout-pill-row" id="scaleOptions">
+          <button type="button" class="btn btn-sm" data-scale-opt="auto" onclick="setUiPref('scale','auto')">🤖 Otomatik</button>
+          <button type="button" class="btn btn-sm" data-scale-opt="normal" onclick="setUiPref('scale','normal')">Standart</button>
+          <button type="button" class="btn btn-sm" data-scale-opt="large" onclick="setUiPref('scale','large')">🔍 Büyük Dokunmatik</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap">
+        <button type="button" class="btn btn-sm" onclick="resetUiPrefs()">↺ Varsayılana Sıfırla</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="closeLayoutSettings()">Tamam</button>
+      </div>
     </div>
   </div>
 
