@@ -24,7 +24,7 @@ installNetGuard({ allowCloud: false });
 ensureCore();
 
 const PORT = Number(process.env.PORT || 4400);
-const HOST = process.env.HOST || '::';
+const HOST = process.env.HOST || '0.0.0.0';
 const PUBLIC_DIR = join(ENGINE, 'public');
 
 // Ankara Büyükşehir Belediyesi Bilgi İşlem Dairesi Başkanlığı (FULL PAKET • 5 Şube Müdürlüğü & Başkent Kart 3 Yıllık İhale Kabul) kurumunu oluştur

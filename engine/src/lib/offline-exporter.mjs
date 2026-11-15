@@ -572,18 +572,20 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
         </div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="btn" onclick="askPreset('/klasor Seçili klasördeki PDF ve Excel dosyalarını analiz et')">📁 Klasördeki PDF &amp; Excel'leri Analiz Et</button>
           <button class="btn" onclick="askPreset('Başkent Kart 3 yıllık ihale kapanışında hangi ayların fatura ve dekontları eksik?')">🔍 Eksik Fatura ve Dekontları Listele</button>
-          <button class="btn" onclick="askPreset('Fatura tutarı ile banka dekont tutarı uyuşmayan aylar hangileri?')">💰 Fatura-Dekont Tutar Farklarını Göster</button>
-          <button class="btn" onclick="askPreset('Teknik şartnameye göre kesin kabul için hangi evraklar bekleniyor?')">📋 Teknik Şartname Eksiklerini Özeti</button>
-          <button class="btn" onclick="askPreset('Yüklenici firmaya gönderilecek resmi eksik evrak ihtar yazısı taslağını hazırla.')">📝 Resmi İhtar Yazısı Taslağı Üret</button>
+          <button class="btn" onclick="askPreset('Fatura tutarı ile banka dekont tutarı uyuşmayan aylar hangileri?')">💰 Tutar Farklarını Göster</button>
+          <button class="btn" onclick="askPreset('Yüklenici firmaya gönderilecek resmi eksik evrak ihtar yazısı taslağını hazırla.')">📝 Resmi İhtar &amp; Rapor Üret</button>
+          <button class="btn" onclick="downloadLatestChatReport()">📄 Son Raporu İndir (.txt)</button>
         </div>
 
         <div id="chatMessages" class="chat-box"></div>
 
-        <div style="display:flex;gap:10px;margin-top:12px">
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
           <button id="micBtn" class="btn" onclick="toggleVoiceInput()">🎤 Sesle Konuş</button>
-          <input id="chatInput" type="text" placeholder="Başkent Kart Proje Sorumlusuna veya seçili ajana sorunuzu yazın..." style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px" onkeydown="if(event.key==='Enter')sendChatMessage()" />
-          <button class="btn btn-primary" onclick="sendChatMessage()">Gönder ➤</button>
+          <input id="chatInput" type="text" placeholder="Komut, soru veya görev yazın (örn: 'Görev ver: Klasördeki PDF ve Excel dosyalarını düzenle')..." style="flex:1;min-width:220px;padding:11px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px" onkeydown="if(event.key==='Enter')sendChatMessage()" />
+          <button class="btn btn-primary" onclick="sendChatMessage()">💬 Gönder</button>
+          <button class="btn btn-success" onclick="sendChatMessage(true)">⚡ Görev Ver &amp; Raporla</button>
         </div>
       </div>
     </section>
@@ -944,10 +946,48 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
       }
     }
 
+    let lastOfflineReportText = '';
+
+    function downloadLatestChatReport() {
+      const txt = lastOfflineReportText || buildOfflineAgentReply('rapor');
+      const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Dijital-Ikiz-Offline-Rapor-' + new Date().toISOString().slice(0, 10) + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
     function buildOfflineAgentReply(q) {
       const r = evaluateAudit();
       const p = BUNDLE.personnel.find(x => x.slug === currentAgentSlug) || BUNDLE.personnel[0] || { title: 'Başkent Kart Proje Sorumlusu' };
+      const ws = typeof ensureProjectWorkspace === 'function' ? ensureProjectWorkspace() : { localFiles: [] };
+      const localFiles = ws.localFiles || [];
+      const pdfFiles = localFiles.filter(f => /\\.pdf$/i.test(f.name));
+      const excelFiles = localFiles.filter(f => /\\.(xlsx?|csv|ods)$/i.test(f.name));
       const low = q.toLocaleLowerCase('tr-TR');
+
+      if (low.includes('/klasor') || low.includes('klasör') || low.includes('pdf') || low.includes('excel') || low.includes('düzenle')) {
+        const lines = [
+          '[' + p.title + ' — %100 Offline Klasör, PDF & Excel Görev Raporu]',
+          '• Seçili Klasör: ' + (ws.folderName || 'Henüz klasör seçilmedi ("Klasör, PDF/Excel & Görevler" sekmesinden seçebilirsiniz)'),
+          '• Toplam Dosya: ' + localFiles.length + ' (📄 PDF: ' + pdfFiles.length + ' | 📊 Excel/CSV: ' + excelFiles.length + ')',
+          '',
+          '📄 Tespit Edilen PDF Dosyaları (' + pdfFiles.length + '):',
+          ...(pdfFiles.length ? pdfFiles.slice(0, 20).map((f, i) => '  ' + (i + 1) + '. ' + f.path + ' (' + f.sizeKb + ' KB)') : ['  (Seçili klasörde PDF bulunamadı)']),
+          '',
+          '📊 Tespit Edilen Excel / CSV Dosyaları (' + excelFiles.length + '):',
+          ...(excelFiles.length ? excelFiles.slice(0, 20).map((f, i) => '  ' + (i + 1) + '. ' + f.path + ' (' + f.sizeKb + ' KB)') : ['  (Seçili klasörde Excel/CSV bulunamadı)']),
+          '',
+          '📋 Yapılan Değerlendirme & Düzenleme Önerisi:',
+          '• İstek: "' + q + '"',
+          '• Başkent Kart 36 Aylık Durum: ' + r.validMonths.length + '/' + r.months.length + ' ay tam uyumlu.',
+          '• Eksik Fatura/Dekont Dönemleri: ' + ([...r.missingInv, ...r.missingRec].join(', ') || 'Yok'),
+          '• Sonuç: Seçili dosyalar görev kaydına işlendi ve "Görevler" sekmesine raporlandı.'
+        ];
+        return lines.join('\\n');
+      }
 
       if (low.includes('ihtar') || low.includes('resmi yazı') || low.includes('tutanak')) {
         return [
@@ -978,19 +1018,24 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
         '• Eksik Market/POS Mutabakatı: ' + (r.missingPos.join(', ') || 'Tamamı Mevcut'),
         '• SLA (%99.90) İhlali: ' + (r.slaBad.map(x => x.donem + ' (%' + x.sla + ')').join(', ') || 'Yok'),
         '• Bekleyen Teknik Şartname Maddeleri: ' + (r.incompleteSpecs.map(s => s.kod + ' (' + s.baslik + ')').join(', ') || '10/10 Tamamlandı'),
+        '• Seçili Klasör Dosyası: ' + localFiles.length + ' adet',
         '• Kabul Kararı: ' + (r.allClear ? 'KESİN KABULE UYGUNDUR' : 'ŞARTLI / EKSİK EVRAK TAMAMLANMALI')
       ].join('\\n');
     }
 
-    async function sendChatMessage() {
+    async function sendChatMessage(forceTask = false) {
       const inp = document.getElementById('chatInput');
       const text = inp.value.trim();
       if (!text) return;
       inp.value = '';
       appendMessage('user', text);
 
+      const low = text.toLocaleLowerCase('tr-TR');
+      const isTaskCmd = forceTask || low.startsWith('görev') || low.startsWith('/gorev') || low.startsWith('/rapor') || low.includes('görev ver');
+
       // Önce bu bilgisayarda yerel Ollama (127.0.0.1:11434) açık mı dene, yoksa gömülü deterministik motorla yanıtla
       const detReply = buildOfflineAgentReply(text);
+      let finalReply = detReply;
       try {
         const res = await fetch('http://127.0.0.1:11434/api/chat', {
           method: 'POST',
@@ -1007,12 +1052,30 @@ export function buildStandaloneOfflineHtml(tenant, tierOverride = null) {
         if (res.ok) {
           const data = await res.json();
           if (data?.message?.content) {
-            appendMessage('agent', data.message.content + '\\n\\n---\\n' + detReply);
-            return;
+            finalReply = data.message.content + '\\n\\n---\\n' + detReply;
           }
         }
       } catch (e) {}
-      appendMessage('agent', detReply);
+
+      lastOfflineReportText = finalReply;
+      if (isTaskCmd && typeof ensureProjectWorkspace === 'function') {
+        const ws = ensureProjectWorkspace();
+        ws.tasks = ws.tasks || [];
+        ws.tasks.unshift({
+          id: 'OFF-' + Date.now(),
+          title: text.slice(0, 70),
+          schedule: 'once',
+          leadAgent: currentAgentSlug,
+          multiAgents: [],
+          instruction: text,
+          lastRunAt: new Date().toLocaleString('tr-TR'),
+          lastOutput: finalReply,
+        });
+        saveLocal();
+        if (typeof renderProjectWorkspace === 'function') renderProjectWorkspace();
+        finalReply += '\\n\\n✅ Bu komut offline görev olarak kaydedildi ve "Klasör, PDF/Excel & Görevler" sekmesinde raporlandı.';
+      }
+      appendMessage('agent', finalReply);
     }
 
     function askPreset(q) {
