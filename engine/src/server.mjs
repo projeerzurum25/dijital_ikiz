@@ -1527,5 +1527,6 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`✔ Kurumsal Dijital İkiz Platformu v4.0 çalışıyor: http://${HOST}:${PORT}`);
+  const displayHost = (HOST === '::' || HOST === '0.0.0.0') ? '127.0.0.1' : HOST;
+  console.log(`✔ Kurumsal Dijital İkiz Platformu v4.0 çalışıyor: http://${displayHost}:${PORT} (http://localhost:${PORT})`);
 });
